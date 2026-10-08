@@ -134,6 +134,16 @@
   .checks div::before{content:"✓"; flex:none; width:22px; height:22px; border-radius:50%; background:var(--data); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center;}
   .checker .note{margin-top:12px; font-size:12.5px; color:var(--data-2);}
 
+  .tool2{margin-top:16px; background:var(--paper); border:1.5px solid var(--line); border-radius:20px; padding:22px 18px; text-align:center;}
+  .tool2 .badge2{display:inline-block; font-size:12px; font-weight:900; color:#fff; background:var(--blue); border-radius:100px; padding:4px 12px;}
+  .tool2 h3{font-size:18px; color:var(--navy); font-weight:900; margin-top:10px; line-height:1.5;}
+  .tool2 p{margin-top:8px; font-size:13.5px; color:var(--text-dim);}
+  .tool-list{display:grid; gap:10px; margin-top:16px; text-align:left;}
+  .tool-item{display:block; background:var(--bg); border:1.5px solid var(--line); border-radius:14px; padding:14px 14px;}
+  .tool-item .ti-name{display:block; font-size:16px; font-weight:900; color:var(--navy);}
+  .tool-item .ti-desc{display:block; font-size:13px; color:var(--text-dim); margin-top:2px; line-height:1.7;}
+  .tool-item .ti-go{display:block; font-size:13.5px; font-weight:900; color:var(--blue); margin-top:8px;}
+
   /* samples (placeholder) */
   .samples{display:grid; gap:12px;}
 
@@ -155,8 +165,11 @@
 
   footer{padding:26px 16px 20px; text-align:center; font-size:12px; color:var(--text-dim);}
   footer a{color:var(--blue); text-decoration:underline; font-weight:700;}
-  .legal{margin-top:36px;}
-  .legal h2{font-size:17px;}
+  .legal{margin-top:0;}
+  .tk{background:none; border:none; border-radius:0; padding:0; margin-top:6px;}
+  .tk summary{display:inline-block; padding:0; font-size:12px; font-weight:700; color:var(--blue); text-decoration:underline; cursor:pointer;}
+  .tk summary::before, .tk summary::after{content:none;}
+  .tk-body{margin-top:14px; text-align:left;}
   .legal .spec th{width:38%;}
   .legal .spec td, .legal .spec th{font-size:13px;}
   .legal .spec td b{font-size:13px;}
@@ -307,6 +320,18 @@
         <a class="btn teal js-checker" data-pos="checker_section" href="https://rowrowrho.github.io/voice-training-lp/recording_checker/">録音チェッカーを使う</a>
         <p class="note">🔒 ファイルはどこにも送信されません（ブラウザ内でチェック）</p>
       </div>
+      <div class="tool2">
+        <span class="badge2">無料・登録不要</span>
+        <h3>MIXでやっていること、<br>体験してみませんか？</h3>
+        <p>MIXの作業を、ブラウザで体験できるツールです。これから少しずつ増やしていきます。</p>
+        <div class="tool-list">
+          <a class="tool-item js-eq" data-pos="mix_experience" href="eq/">
+            <span class="ti-name">声のEQ体験</span>
+            <span class="ti-desc">5つの帯域を動かして、EQの「あり／なし」を聞き比べ。声がどう変わるかを、耳と目で体験できます。</span>
+            <span class="ti-go">EQを体験する →</span>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -351,12 +376,14 @@
   </div>
 </main>
 
-<!-- 特定商取引法に基づく表記 -->
-<section class="sec legal" id="tokusho">
-  <div class="wrap">
-    <h2>特定商取引法に基づく表記</h2>
-    <div class="card">
-      <table class="spec">
+<footer>
+  <p><a href="https://rowrowrho.github.io/top/?utm_source=mix_lp&utm_medium=footer&utm_campaign=back_to_top" onclick="if(window.gtag)gtag('event','back_to_top',{link_name:'mix_lp_footer'})">← 歌い手ρのトップページへ</a></p>
+  <p style="margin-top:6px">ボイストレーニングについては <a href="https://rowrowrho.github.io/voice-training-lp/">RHOボイトレ</a></p>
+  <details class="tk" id="tokusho">
+    <summary>特定商取引法に基づく表記</summary>
+    <div class="tk-body">
+      <div class="card legal">
+        <table class="spec">
         <tr><th>販売事業者</th><td>RHO MIX</td></tr>
         <tr><th>運営責任者</th><td>請求があった場合には、遅滞なく開示いたします</td></tr>
         <tr><th>所在地</th><td>請求があった場合には、遅滞なく開示いたします</td></tr>
@@ -370,14 +397,9 @@
         <tr><th>キャンセル</th><td>ご依頼から3日以内：無料<br>それ以降：依頼料の50%<br>納品後：依頼料の100%<br>※急ぎ対応のご依頼は、ご依頼後のキャンセルをお受けできません（キャンセルされた場合も、依頼料の100%をいただきます）</td></tr>
         <tr><th>返品・返金</th><td>納品後のキャンセル・返金はお受けできません（キャンセル料は依頼料の100%）。修正は回数の上限なく対応いたします</td></tr>
       </table>
+      </div>
     </div>
-  </div>
-</section>
-
-<footer>
-  <p><a href="https://rowrowrho.github.io/top/?utm_source=mix_lp&utm_medium=footer&utm_campaign=back_to_top" onclick="if(window.gtag)gtag('event','back_to_top',{link_name:'mix_lp_footer'})">← 歌い手ρのトップページへ</a></p>
-  <p style="margin-top:6px">ボイストレーニングについては <a href="https://rowrowrho.github.io/voice-training-lp/">RHOボイトレ</a></p>
-  <p style="margin-top:6px"><a href="#tokusho">特定商取引法に基づく表記</a></p>
+  </details>
   <p style="margin-top:6px">© RHO MIX</p>
 </footer>
 
@@ -395,12 +417,22 @@
     a.href = FORM_URL; a.target = '_blank'; a.rel = 'noopener';
     a.addEventListener('click', () => track('mix_form_click', { position: a.dataset.pos }));
   });
+  document.querySelectorAll('.js-eq').forEach((a) => {
+    a.addEventListener('click', () => track('mix_eq_click', { position: a.dataset.pos }));
+  });
   document.querySelectorAll('.js-checker').forEach((a) => {
     a.addEventListener('click', () => track('mix_checker_click', { position: a.dataset.pos }));
   });
-  document.querySelectorAll('details').forEach((d) => {
+  document.querySelectorAll('.faq details').forEach((d) => {
     d.addEventListener('toggle', () => { if (d.open) track('mix_faq_open', { question: d.querySelector('summary').textContent }); });
   });
+
+  // 特定商取引法に基づく表記：クリックで開く（#tokusho のリンクからも開く）
+  const tk = document.getElementById('tokusho');
+  tk.addEventListener('toggle', () => { if (tk.open) track('mix_tokusho_open'); });
+  const openFromHash = () => { if (location.hash === '#tokusho') { tk.open = true; tk.scrollIntoView(); } };
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
 
   // ファーストビューのボタンが見えなくなったら下部ボタンを出す
   const sticky = document.getElementById('sticky');
