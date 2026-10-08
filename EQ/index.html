@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>声のEQ体験｜RHO MIX</title>
+<meta name="description" content="音声ファイルを読み込んで、5つの帯域を上げ下げ。EQのあり／なしを聞き比べて、声がどう変わるかを耳と目で体験できる無料ツールです。">
+<meta property="og:title" content="声のEQ体験｜RHO MIX">
+<meta property="og:description" content="5つの帯域を動かして、EQで声がどう変わるかを体験。無料・登録不要。">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ME8HE69PX8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ME8HE69PX8');
+</script>
+<style>
+:root{
+  --navy:#173A5E; --navy-2:#0F2A46; --blue:#2E76B6; --sky:#EAF2FB; --bg:#F5F8FC; --paper:#fff;
+  --text:#2B3A4A; --dim:#66788C; --line:#E1E8F0;
+  --amber:#F5B84E; --amber-bg:#FDF3E1; --amber-ink:#8A5A00;
+  --teal:#17A98D; --teal-2:#0E7F69; --teal-bg:#E7F7F3;
+  --bad:#E0685C; --bad-bg:#FBEAE8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"Zen Kaku Gothic New",sans-serif;line-height:1.8;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+header{background:var(--navy-2);color:#fff}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:52px}
+header a.back{font-size:13px;font-weight:700;opacity:.9}
+header .t{font-weight:900;font-size:15px}
+.intro{padding:28px 0 8px;text-align:center}
+.intro h1{font-size:clamp(24px,7vw,32px);font-weight:900;color:var(--navy);line-height:1.4}
+.intro p{font-size:14px;color:var(--dim);margin-top:8px}
+.tip{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;color:var(--amber-ink);background:var(--amber-bg);border:1px solid var(--amber);border-radius:99px;padding:3px 12px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 24px rgba(23,58,94,.07);padding:18px 16px;margin-top:16px}
+.step{font-size:12px;font-weight:900;color:var(--blue);letter-spacing:.08em}
+.card h2{font-size:17px;font-weight:900;color:var(--navy);margin:2px 0 10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:900;font-size:15px;padding:12px 18px;border-radius:12px;border:none;cursor:pointer;font-family:inherit}
+.btn.navy{background:var(--navy);color:#fff}
+.btn.ghost{background:var(--sky);color:var(--navy)}
+.btn.amber{background:var(--amber);color:var(--navy-2)}
+.btn.teal{background:var(--teal);color:#fff}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.file-name{font-size:13px;color:var(--dim);word-break:break-all}
+audio{width:100%;margin-top:12px}
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.ab button{padding:14px 8px;border-radius:12px;border:2px solid var(--line);background:#fff;font-family:inherit;font-weight:900;font-size:15px;color:var(--dim);cursor:pointer}
+.ab button small{display:block;font-size:11px;font-weight:500}
+.ab button.on.off{border-color:var(--bad);background:var(--bad-bg);color:#B23F33}
+.ab button.on.eq{border-color:var(--teal);background:var(--teal-bg);color:var(--teal-2)}
+.canvas-wrap{position:relative;width:100%;height:190px;background:#0F2A46;border-radius:12px;overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--dim)}
+.legend i{display:inline-block;width:18px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.band{padding:12px 0;border-bottom:1px solid var(--line)}
+.band:last-of-type{border-bottom:none}
+.band .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.band b{color:var(--navy);font-size:15px}
+.band .hz{font-size:12px;color:var(--dim);margin-left:6px}
+.band .val{font-weight:900;font-variant-numeric:tabular-nums;font-size:15px;color:var(--navy);min-width:64px;text-align:right}
+.band .val.up{color:var(--teal-2)} .band .val.down{color:#B23F33}
+input[type=range]{width:100%;height:36px;accent-color:var(--blue);margin:4px 0}
+.band .desc{font-size:12.5px;color:var(--dim);line-height:1.6}
+.presets{display:flex;flex-wrap:wrap;gap:8px}
+.presets button{font-family:inherit;font-weight:700;font-size:13px;padding:9px 12px;border-radius:99px;border:1.5px solid var(--blue);background:#fff;color:var(--blue);cursor:pointer}
+.presets button.reset{border-color:var(--line);color:var(--dim)}
+.ptext{margin-top:10px;font-size:13px;color:var(--text);min-height:2.4em}
+.note{font-size:12.5px;color:var(--dim);margin-top:10px}
+.cta{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;border-radius:20px;padding:26px 18px;margin-top:20px;text-align:center}
+.cta h2{font-size:19px;font-weight:900;line-height:1.5}
+.cta p{font-size:13.5px;color:#D6E2EE;margin-top:8px}
+.cta .btns{display:grid;gap:10px;max-width:380px;margin:16px auto 0}
+.cta .btn{width:100%}
+.cta .btn.line{background:transparent;border:1.5px solid rgba(255,255,255,.5);color:#fff}
+footer{padding:22px 16px 34px;text-align:center;font-size:12px;color:var(--dim)}
+footer a{color:var(--blue);text-decoration:underline;font-weight:700}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="../" data-link="header_back">← RHO MIX</a>
+    <span class="t">声のEQ体験</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <h1>EQで、声はどう変わる？<br>聞き比べて体験しよう</h1>
+    <p>音声ファイルを読み込んで、5つの帯域を上げ下げしてみてください。<br>EQの「あり／なし」を、ワンタップで聞き比べられます。</p>
+    <span class="tip">🎧 イヤホン・ヘッドホン推奨 / 音量は小さめから</span>
+  </div>
+
+  <section class="card">
+    <div class="step">STEP 1</div>
+    <h2>音声を選ぶ</h2>
+    <div class="row">
+      <button class="btn navy" id="btnFile">音声ファイルを選ぶ</button>
+      <button class="btn ghost" id="btnNoise">サンプル音(ノイズ)で試す</button>
+      <input type="file" id="fileInput" accept="audio/*" hidden>
+    </div>
+    <p class="file-name" id="fileName" style="margin-top:8px">まだ選ばれていません</p>
+    <audio id="player" controls loop></audio>
+    <p class="note">🔒 ファイルはどこにも送信されません(ブラウザ内で再生します)。歌声やボーカルの録音を読み込むと、いちばん変化が分かりやすいです。</p>
+  </section>
+
+  <section class="card">
+    <div class="step">STEP 2</div>
+    <h2>聞き比べる</h2>
+    <div class="ab" id="ab">
+      <button id="abOff" class="off">EQなし<small>元の音</small></button>
+      <button id="abEq" class="eq on">EQあり<small>下の設定を反映</small></button>
+    </div>
+    <div style="margin-top:14px" class="canvas-wrap"><canvas id="spec"></canvas></div>
+    <div class="legend">
+      <span><i style="background:#17A98D"></i>いまの音の帯域(再生中に動きます)</span>
+      <span><i style="background:#F5B84E"></i>EQのカーブ(山=上げた、谷=下げた)</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="step">STEP 3</div>
+    <h2>帯域を動かす</h2>
+    <p class="note" style="margin:-4px 0 8px">±12dBの範囲で動かせます。まずは「お題」ボタンから試すのがおすすめです。</p>
+    <div class="presets" id="presets"></div>
+    <p class="ptext" id="ptext"></p>
+    <div id="bands" style="margin-top:6px"></div>
+  </section>
+
+  <section class="cta">
+    <h2>EQは、MIXのほんの一部です</h2>
+    <p>実際のMIXでは、EQのほかに、音量や響きのバランス調整、音程・リズムの補正なども行います。あなたの歌ってみたを、聴きやすく仕上げます。</p>
+    <div class="btns">
+      <a class="btn amber" id="ctaForm" href="#" target="_blank" rel="noopener" data-link="cta_form">MIXを依頼する(フォームへ)</a>
+      <a class="btn line" href="../" data-link="cta_lp">料金・流れを見る</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p><a href="../" data-link="footer_mix">RHO MIX</a> / <a href="https://rowrowrho.github.io/top/?utm_source=mix_eq&utm_medium=footer&utm_campaign=back_to_top" data-link="footer_top">← 歌い手ρのトップページへ</a></p>
+  <p style="margin-top:6px">※ 帯域の説明は一般的な目安です。曲や声によって効き方は変わります。</p>
+</footer>
+
+<script>
+(() => {
+'use strict';
+const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScDBnkhKNUxxVmrZOpWXMTe_Q-75dTuoWCIFhULGhQDI18SsQ/viewform?usp=header';
+const track = (n,p) => { try { if (typeof gtag === 'function') gtag('event', n, p||{}); } catch(e){} };
+const $ = id => document.getElementById(id);
+
+// ===== 帯域の定義(歌声向けの5バンド) =====
+const BANDS = [
+  { key:'low',  name:'低音の太さ', hz:100,  type:'lowshelf',  q:0.7, up:'太く、あたたかくなる(上げすぎるとボワつく)', down:'すっきり、軽くなる' },
+  { key:'mud',  name:'こもり',     hz:300,  type:'peaking',   q:1.0, up:'こもる、箱に入ったような音になる',               down:'こもりが取れて、抜けがよくなる' },
+  { key:'pres', name:'存在感',     hz:3000, type:'peaking',   q:1.0, up:'言葉がはっきりして前に出る(上げすぎるとキツい)', down:'奥に引っ込む、やさしい印象になる' },
+  { key:'sib',  name:'刺さり',     hz:6000, type:'peaking',   q:1.2, up:'サ行が強くなり、キンキンしやすい',               down:'まろやかになる(下げすぎると言葉がぼやける)' },
+  { key:'air',  name:'空気感',     hz:10000,type:'highshelf', q:0.7, up:'きらびやかで、息づかいが見える',                 down:'落ち着いた、暗めの音になる' }
+];
+const PRESETS = [
+  { name:'こもりを取る',       g:[0,-4,0,0,0],  t:'300Hz付近を下げると、こもった声が抜けやすくなります。' },
+  { name:'言葉をはっきりさせる', g:[0,-2,3,0,0],  t:'こもりを少し下げて、3kHz付近を上げると、歌詞が聞き取りやすくなります。' },
+  { name:'キラッと明るく',     g:[0,0,1,0,4],   t:'高い帯域(空気感)を上げると、明るくきらびやかな印象になります。' },
+  { name:'やさしくまろやかに', g:[0,0,-2,-3,-2],t:'3kHz〜10kHzを少し下げると、やわらかく落ち着いた声になります。' }
+];
+
+let ctx=null, srcNode=null, filters=[], dry, wet, limiter, analyser, useEq=true;
+let noiseNode=null, usingNoise=false;
+const gains = [0,0,0,0,0];
+
+// ===== UI生成 =====
+const bandsEl = $('bands');
+BANDS.forEach((b,i) => {
+  const hzLabel = b.hz >= 1000 ? (b.hz/1000)+'kHz' : b.hz+'Hz';
+  const d = document.createElement('div'); d.className='band';
+  d.innerHTML = '<div class="top"><div><b>'+b.name+'</b><span class="hz">'+hzLabel+(b.type!=='peaking'?'〜':'付近')+'</span></div><span class="val" id="val'+i+'">0 dB</span></div>'
+    +'<input type="range" id="sl'+i+'" min="-12" max="12" step="0.5" value="0" aria-label="'+b.name+'">'
+    +'<div class="desc">＋ '+b.up+'<br>− '+b.down+'</div>';
+  bandsEl.appendChild(d);
+  d.querySelector('input').addEventListener('input', e => setGain(i, parseFloat(e.target.value), true));
+});
+const presetsEl = $('presets');
+PRESETS.forEach((p,pi) => {
+  const b = document.createElement('button'); b.textContent = p.name;
+  b.addEventListener('click', () => { p.g.forEach((v,i)=>setGain(i,v,false)); $('ptext').textContent = p.t; setEq(true); track('mix_eq_preset',{preset:p.name}); });
+  presetsEl.appendChild(b);
+});
+const rb = document.createElement('button'); rb.className='reset'; rb.textContent='リセット';
+rb.addEventListener('click', () => { gains.forEach((_,i)=>setGain(i,0,false)); $('ptext').textContent=''; });
+presetsEl.appendChild(rb);
+
+function setGain(i, v, fromSlider){
+  gains[i] = v;
+  if (filters[i]) filters[i].gain.value = v;
+  if (!fromSlider) $('sl'+i).value = v;
+  const el = $('val'+i); el.textContent = (v>0?'+':'')+v.toFixed(1).replace('.0','')+' dB';
+  el.className = 'val' + (v>0?' up':v<0?' down':'');
+  if (fromSlider) $('ptext').textContent = '';
+}
+
+// ===== Web Audio =====
+function ensureCtx(){
+  if (ctx) return;
+  ctx = new (window.AudioContext||window.webkitAudioContext)();
+  filters = BANDS.map((b,i) => { const f = ctx.createBiquadFilter(); f.type=b.type; f.frequency.value=b.hz; f.Q.value=b.q; f.gain.value=gains[i]; return f; });
+  dry = ctx.createGain(); wet = ctx.createGain();
+  limiter = ctx.createDynamicsCompressor();
+  limiter.threshold.value=-3; limiter.knee.value=0; limiter.ratio.value=20; limiter.attack.value=0.003; limiter.release.value=0.1;
+  analyser = ctx.createAnalyser(); analyser.fftSize=4096; analyser.smoothingTimeConstant=0.8; analyser.minDecibels=-90; analyser.maxDecibels=-20;
+  // 入力 → (dry) / (フィルタ5段 → wet) → limiter → analyser → 出力
+  filters.reduce((prev,f)=>{ prev.connect(f); return f; }, wet);
+  filters[filters.length-1].connect(limiter);
+  dry.connect(limiter);
+  limiter.connect(analyser); analyser.connect(ctx.destination);
+  srcNode = ctx.createMediaElementSource($('player'));
+  srcNode.connect(dry); srcNode.connect(wet);
+  applyAB();
+}
+function applyAB(){
+  if (!ctx) return;
+  const t = ctx.currentTime;
+  dry.gain.setTargetAtTime(useEq?0:1, t, 0.015);
+  wet.gain.setTargetAtTime(useEq?1:0, t, 0.015);
+}
+function setEq(on){
+  useEq = on;
+  $('abEq').className = 'eq' + (on ? ' on' : '');
+  $('abOff').className = 'off' + (on ? '' : ' on');
+  applyAB();
+}
+$('abEq').addEventListener('click', () => { setEq(true); track('mix_eq_ab',{mode:'eq'}); });
+$('abOff').addEventListener('click', () => { setEq(false); track('mix_eq_ab',{mode:'off'}); });
+
+// ===== 入力 =====
+const player = $('player');
+$('btnFile').addEventListener('click', () => $('fileInput').click());
+$('fileInput').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  ensureCtx(); stopNoise();
+  if (player.dataset.url) URL.revokeObjectURL(player.dataset.url);
+  const url = URL.createObjectURL(f); player.dataset.url = url; player.src = url;
+  $('fileName').textContent = f.name;
+  track('mix_eq_file_load');
+  player.play().catch(()=>{});
+});
+player.addEventListener('play', () => { ensureCtx(); if (ctx.state==='suspended') ctx.resume(); });
+
+// ノイズ(ファイルが手元にない人向けの簡易サンプル。ピンクノイズ)
+function makePinkNoise(){
+  const len = ctx.sampleRate*4, buf = ctx.createBuffer(1,len,ctx.sampleRate), d = buf.getChannelData(0);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  for (let i=0;i<len;i++){ const w=Math.random()*2-1;
+    b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759; b2=0.96900*b2+w*0.1538520; b3=0.86650*b3+w*0.3104856; b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
+    d[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.08; b6=w*0.115926; }
+  return buf;
+}
+function stopNoise(){ if (noiseNode){ try{noiseNode.stop();}catch(e){} noiseNode=null; } usingNoise=false; }
+$('btnNoise').addEventListener('click', () => {
+  ensureCtx(); if (ctx.state==='suspended') ctx.resume();
+  player.pause();
+  if (usingNoise){ stopNoise(); $('fileName').textContent='サンプル音を停止しました'; return; }
+  noiseNode = ctx.createBufferSource(); noiseNode.buffer = makePinkNoise(); noiseNode.loop = true;
+  noiseNode.connect(dry); noiseNode.connect(wet); noiseNode.start();
+  usingNoise = true; $('fileName').textContent = 'サンプル音(ピンクノイズ)を再生中。もう一度押すと止まります';
+  track('mix_eq_noise');
+});
+
+// ===== 描画(スペクトラム + EQカーブ) =====
+const cv = $('spec'), c2 = cv.getContext('2d');
+const FMIN=20, FMAX=20000, DB_RANGE=12;
+let W=0,H=0,dpr=1;
+function resize(){ dpr=Math.min(window.devicePixelRatio||1,2); const r=cv.getBoundingClientRect(); W=r.width; H=r.height; cv.width=W*dpr; cv.height=H*dpr; c2.setTransform(dpr,0,0,dpr,0,0); }
+window.addEventListener('resize', resize); resize();
+const xOf = f => (Math.log(f/FMIN)/Math.log(FMAX/FMIN))*W;
+const curveFreqs = new Float32Array(160).map((_,i)=>FMIN*Math.pow(FMAX/FMIN, i/159));
+const mag = new Float32Array(160), ph = new Float32Array(160), tot = new Float32Array(160);
+
+function computeCurve(){
+  tot.fill(0);
+  filters.forEach((f,i)=>{ f.getFrequencyResponse(curveFreqs, mag, ph); for(let k=0;k<tot.length;k++) tot[k] += 20*Math.log10(Math.max(mag[k],1e-6)); });
+}
+function draw(){
+  requestAnimationFrame(draw);
+  c2.clearRect(0,0,W,H);
+  // grid
+  c2.font='10px sans-serif'; c2.textBaseline='bottom';
+  [50,100,200,500,1000,2000,5000,10000].forEach(f=>{
+    const x=xOf(f); c2.strokeStyle='rgba(255,255,255,.12)'; c2.beginPath(); c2.moveTo(x,0); c2.lineTo(x,H); c2.stroke();
+    c2.fillStyle='rgba(255,255,255,.55)'; c2.fillText(f>=1000?(f/1000)+'k':f, x+3, H-2);
+  });
+  c2.strokeStyle='rgba(255,255,255,.22)'; c2.beginPath(); c2.moveTo(0,H*0.5); c2.lineTo(W,H*0.5); c2.stroke();
+  // spectrum
+  if (analyser){
+    const n=analyser.frequencyBinCount, data=new Float32Array(n); analyser.getFloatFrequencyData(data);
+    const nyq=ctx.sampleRate/2; c2.beginPath(); c2.moveTo(0,H);
+    for (let x=0;x<=W;x+=2){
+      const f=FMIN*Math.pow(FMAX/FMIN,x/W), idx=Math.min(n-1,Math.round(f/nyq*n));
+      const tilt=4.5*Math.log2(f/1000);
+      const v=(data[idx]+tilt-analyser.minDecibels)/(analyser.maxDecibels-analyser.minDecibels);
+      c2.lineTo(x, H - Math.max(0,Math.min(1,v))*H*0.95);
+    }
+    c2.lineTo(W,H); c2.closePath(); c2.fillStyle='rgba(23,169,141,.45)'; c2.fill(); c2.strokeStyle='#17A98D'; c2.lineWidth=1.5; c2.stroke();
+  }
+  // EQ curve (±12dB, 中央がフラット)
+  const y0=H*0.5, sc=(H*0.42)/DB_RANGE;
+  if (filters.length){ computeCurve();
+    c2.beginPath();
+    for (let k=0;k<curveFreqs.length;k++){ const x=xOf(curveFreqs[k]), y=y0 - tot[k]*sc; k?c2.lineTo(x,y):c2.moveTo(x,y); }
+    c2.strokeStyle = useEq ? '#F5B84E' : 'rgba(245,184,78,.3)'; c2.lineWidth=2.5; c2.setLineDash(useEq?[]:[5,4]); c2.stroke(); c2.setLineDash([]);
+  } else {
+    c2.strokeStyle='rgba(245,184,78,.5)'; c2.lineWidth=2; c2.beginPath(); c2.moveTo(0,y0); c2.lineTo(W,y0); c2.stroke();
+  }
+  // band markers
+  BANDS.forEach((b,i)=>{ const x=xOf(b.hz), y=y0-gains[i]*sc; c2.beginPath(); c2.arc(x,y,4.5,0,6.283); c2.fillStyle=useEq?'#F5B84E':'rgba(245,184,78,.4)'; c2.fill(); });
+}
+draw();
+
+// ===== CTA =====
+const form = $('ctaForm'); form.href = FORM_URL;
+document.querySelectorAll('[data-link]').forEach(a => a.addEventListener('click', () => track('mix_eq_link',{link:a.dataset.link})));
+})();
+</script>
+</body>
+</html>
