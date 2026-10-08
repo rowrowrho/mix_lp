@@ -211,12 +211,6 @@ footer a{color:var(--blue);text-decoration:underline;font-weight:700}
     <div class="seg" id="winSeg"><span>表示の長さ</span><button data-w="3">3秒</button><button data-w="8" class="on">8秒</button><button data-w="20">20秒</button></div>
 
     <div class="mixer" id="mixer"></div>
-    <div class="presetrow">
-      <select id="presetSel" aria-label="お題を選ぶ"></select>
-      <button id="btnReset">リセット</button>
-    </div>
-    <p class="ptext" id="ptext"></p>
-
     <p class="note">フェーダーは、指でなぞって動かします。ダブルタップで初期値に戻ります。名前の下の「?」で、それぞれの説明が出ます。</p>
 
     <div class="dcwrap">
@@ -224,6 +218,12 @@ footer a{color:var(--blue);text-decoration:underline;font-weight:700}
       <canvas id="dc"></canvas>
       <p class="dcnow" id="dcNow"></p>
     </div>
+
+    <div class="presetrow">
+      <select id="presetSel" aria-label="お題を選ぶ"></select>
+      <button id="btnReset">リセット</button>
+    </div>
+    <p class="ptext" id="ptext"></p>
   </section>
 
   <section class="cta">
