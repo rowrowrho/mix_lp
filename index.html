@@ -155,6 +155,11 @@
 
   footer{padding:26px 16px 20px; text-align:center; font-size:12px; color:var(--text-dim);}
   footer a{color:var(--blue); text-decoration:underline; font-weight:700;}
+  .legal{margin-top:36px;}
+  .legal h2{font-size:17px;}
+  .legal .spec th{width:38%;}
+  .legal .spec td, .legal .spec th{font-size:13px;}
+  .legal .spec td b{font-size:13px;}
 
   /* sticky cta (mobile) */
   .sticky{position:fixed; left:0; right:0; bottom:0; z-index:60; background:rgba(255,255,255,0.96); backdrop-filter:blur(8px); border-top:1px solid var(--line); padding:10px 16px calc(10px + env(safe-area-inset-bottom));
@@ -181,7 +186,7 @@
     <p class="lead">ボイストレーナーでもあるMIX師が、<br>あなたの歌声を活かして仕上げます。</p>
     <div class="price-box">
       <div class="p-label">料金</div>
-      <div class="p-num">¥6,000<small>／1曲</small></div>
+      <div class="p-num">¥6,000<small>／1曲（税込）</small></div>
       <div class="p-note">ボーカルのMIX・ボーカルエディット<br>（音程・リズム補正など）</div>
     </div>
     <a class="btn js-form" data-pos="hero" href="#">MIXを依頼する（フォームへ）</a>
@@ -243,12 +248,13 @@
       <h2>料金・納期・修正回数</h2>
       <div class="card">
         <table class="spec">
-          <tr><th>料金</th><td><b>¥6,000</b>／1曲</td></tr>
+          <tr><th>料金</th><td><b>¥6,000</b>／1曲（税込）</td></tr>
           <tr><th>納期</th><td>1週間以内が目標<br><span class="dim" style="font-size:12.5px">（曲や時期によってはご相談させてください）</span></td></tr>
           <tr><th>修正回数</th><td><b>上限なし</b></td></tr>
-          <tr><th>急ぎ対応</th><td><b>＋¥3,000</b><br><span class="dim" style="font-size:12.5px">3日以内にお届け</span></td></tr>
-          <tr><th>MV制作</th><td><b>¥8,000</b><br><span class="dim" style="font-size:12.5px">MIXとあわせて依頼できます（セット割引はありません）</span></td></tr>
-          <tr><th>お支払い</th><td>PayPay・銀行振込</td></tr>
+          <tr><th>急ぎ対応</th><td><b>＋¥3,000</b>（税込）<br><span class="dim" style="font-size:12.5px">3日以内にお届け（MIXのみ。MV制作を含むご依頼は対象外です）<br>ご依頼後のキャンセルはお受けできません（キャンセルされた場合も依頼料の100%をいただきます）</span></td></tr>
+          <tr><th>MV制作</th><td><b>¥8,000</b>（税込）<br><span class="dim" style="font-size:12.5px">MIXとあわせて依頼できます（セット割引はありません）<br>制作期間は1週間ほど余裕をもってご依頼ください</span></td></tr>
+          <tr><th>お支払い</th><td>納品後に PayPay・銀行振込<br><span class="dim" style="font-size:12.5px">振込手数料はご依頼者様のご負担となります</span></td></tr>
+          <tr><th>キャンセル料</th><td>ご依頼から3日以内：無料<br>それ以降：依頼料の50%<br>納品後：依頼料の100%<br><span class="dim" style="font-size:12.5px">※急ぎ対応のご依頼は、ご依頼後のキャンセルをお受けできません（キャンセルされた場合も、依頼料の100%をいただきます）</span></td></tr>
         </table>
         <div class="scope">
           <div class="yes">
@@ -325,9 +331,10 @@
         <details><summary>録音がちゃんとできているか不安です</summary><div class="ans">依頼の前に、無料の<a href="https://rowrowrho.github.io/voice-training-lp/recording_checker/" class="js-checker" data-pos="faq" style="color:var(--blue);text-decoration:underline;font-weight:700">録音チェッカー</a>で音割れ・ノイズ・ステレオ／モノラルを確認できます。音割れが多い場合は、録り直しをおすすめしています。</div></details>
         <details><summary>納期はどれくらいですか？</summary><div class="ans">1週間以内でのお届けを目標にしています。曲や時期によってはご相談させてください。</div></details>
         <details><summary>修正は何回までできますか？</summary><div class="ans">修正回数に上限はありません。</div></details>
-        <details><summary>急ぎで仕上げてもらうことはできますか？</summary><div class="ans">はい、急ぎ対応は＋¥3,000です。3日以内にお届けします。</div></details>
-        <details><summary>MV（動画）もお願いできますか？</summary><div class="ans">はい、あわせてご依頼いただけます。MV制作の料金は¥8,000です。なお、MIXとのセット割引はありません。</div></details>
-        <details><summary>支払い方法は？</summary><div class="ans">PayPay または 銀行振込 でお願いしています。</div></details>
+        <details><summary>急ぎで仕上げてもらうことはできますか？</summary><div class="ans">はい、MIXのみのご依頼なら急ぎ対応（＋¥3,000）で3日以内にお届けします。MV制作を含むご依頼は、急ぎ対応の対象外です。また、急ぎ対応はご依頼後のキャンセルをお受けできません。キャンセルされた場合も、依頼料の100%をいただきますのでご了承ください。</div></details>
+        <details><summary>MV（動画）もお願いできますか？</summary><div class="ans">はい、あわせてご依頼いただけます。MV制作の料金は¥8,000です。制作期間は1週間ほど余裕をもってご依頼ください。なお、MIXとのセット割引はありません。</div></details>
+        <details><summary>支払い方法は？</summary><div class="ans">納品後に、PayPay または 銀行振込 でお支払いください。振込手数料はご依頼者様のご負担となります。</div></details>
+        <details><summary>キャンセルはできますか？</summary><div class="ans">ご依頼から3日以内のキャンセルは無料です。それ以降は依頼料の50%、納品後は依頼料の100%をキャンセル料としていただきます。なお、急ぎ対応のご依頼は、ご依頼後のキャンセルをお受けできません（キャンセルされた場合も、依頼料の100%をいただきます）。</div></details>
         <details><summary>どんな形式で録音データを送ればいいですか？</summary><div class="ans">形式の指定はありません。できれば送る前に、無料の<a href="https://rowrowrho.github.io/voice-training-lp/recording_checker/" class="js-checker" data-pos="faq_format" style="color:var(--blue);text-decoration:underline;font-weight:700">録音チェッカー</a>で音割れ・ノイズを確認してもらえると安心です（チェッカーはWAVファイルに対応しています）。</div></details>
       </div>
     </div>
@@ -337,20 +344,44 @@
   <div class="final">
     <div class="wrap">
       <h2>あなたの歌声、<br>MIXで仕上げませんか？</h2>
-      <p>1曲 ¥6,000（ボーカルのMIX・ボーカルエディット）／修正回数は上限なし</p>
+      <p>1曲 ¥6,000（税込）（ボーカルのMIX・ボーカルエディット）／修正回数は上限なし</p>
       <a class="btn js-form" data-pos="final" href="#">MIXを依頼する（フォームへ）</a>
       <span class="btn-sub">先に録音を確かめたい方は <a class="js-checker" data-pos="final" href="https://rowrowrho.github.io/voice-training-lp/recording_checker/" style="text-decoration:underline">録音チェッカー（無料）</a></span>
     </div>
   </div>
 </main>
 
+<!-- 特定商取引法に基づく表記 -->
+<section class="sec legal" id="tokusho">
+  <div class="wrap">
+    <h2>特定商取引法に基づく表記</h2>
+    <div class="card">
+      <table class="spec">
+        <tr><th>販売事業者</th><td>RHO MIX</td></tr>
+        <tr><th>運営責任者</th><td>請求があった場合には、遅滞なく開示いたします</td></tr>
+        <tr><th>所在地</th><td>請求があった場合には、遅滞なく開示いたします</td></tr>
+        <tr><th>電話番号</th><td>請求があった場合には、遅滞なく開示いたします</td></tr>
+        <tr><th>お問い合わせ</th><td><a class="js-form" data-pos="tokusho" href="#" style="color:var(--blue);text-decoration:underline;font-weight:700">依頼フォーム</a>よりご連絡ください</td></tr>
+        <tr><th>販売価格</th><td>ボーカルのMIX・ボーカルエディット：¥6,000／1曲<br>急ぎ対応（3日以内・MIXのみ）：＋¥3,000<br>MV制作：¥8,000<br>※表示価格はすべて税込です</td></tr>
+        <tr><th>料金以外の必要料金</th><td>銀行振込の場合の振込手数料（ご依頼者様のご負担）</td></tr>
+        <tr><th>支払方法</th><td>PayPay・銀行振込</td></tr>
+        <tr><th>支払時期</th><td>納品後</td></tr>
+        <tr><th>提供時期</th><td>MIX：1週間以内を目標（ご相談させていただく場合があります）<br>急ぎ対応：3日以内（MIXのみ）<br>MV制作：1週間ほど余裕をもってご依頼ください</td></tr>
+        <tr><th>キャンセル</th><td>ご依頼から3日以内：無料<br>それ以降：依頼料の50%<br>納品後：依頼料の100%<br>※急ぎ対応のご依頼は、ご依頼後のキャンセルをお受けできません（キャンセルされた場合も、依頼料の100%をいただきます）</td></tr>
+        <tr><th>返品・返金</th><td>納品後のキャンセル・返金はお受けできません（キャンセル料は依頼料の100%）。修正は回数の上限なく対応いたします</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
 <footer>
   <p>ボイストレーニングについては <a href="https://rowrowrho.github.io/voice-training-lp/">RHOボイトレ</a></p>
+  <p style="margin-top:6px"><a href="#tokusho">特定商取引法に基づく表記</a></p>
   <p style="margin-top:6px">© RHO MIX</p>
 </footer>
 
 <div class="sticky" id="sticky">
-  <a class="js-form" data-pos="sticky" href="#">MIXを依頼する <small>¥6,000／1曲</small></a>
+  <a class="js-form" data-pos="sticky" href="#">MIXを依頼する <small>¥6,000／1曲（税込）</small></a>
 </div>
 
 <script>
