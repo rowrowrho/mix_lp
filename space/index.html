@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>リバーブ・ディレイ体験｜RHO MIX</title>
+<meta name="description" content="声を録音して、リバーブとディレイのフェーダーを動かすと、声のあとに伸びる「響きのしっぽ」がどう変わるかを、目で見て、耳で聞き比べられる無料ツール。">
+<meta property="og:title" content="リバーブ・ディレイ体験｜RHO MIX">
+<meta property="og:description" content="フェーダーを動かすと、響きのしっぽが変わる。リバーブとディレイを、目と耳で体験。無料・登録不要。">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ME8HE69PX8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ME8HE69PX8');
+</script>
+<style>
+:root{
+  --navy:#173A5E; --navy-2:#0F2A46; --blue:#2E76B6; --sky:#EAF2FB; --bg:#F5F8FC; --paper:#fff;
+  --text:#2B3A4A; --dim:#66788C; --line:#E1E8F0;
+  --amber:#F5B84E; --amber-bg:#FDF3E1; --amber-ink:#8A5A00;
+  --teal:#17A98D; --teal-2:#0E7F69; --teal-bg:#E7F7F3;
+  --bad:#E0685C; --bad-bg:#FBEAE8; --bad-ink:#B23F33;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"Zen Kaku Gothic New",sans-serif;line-height:1.8;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+header{background:var(--navy-2);color:#fff}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:52px}
+header a.back{font-size:13px;font-weight:700;opacity:.9}
+header .t{font-weight:900;font-size:15px}
+.intro{padding:28px 0 8px;text-align:center}
+.intro h1{font-size:clamp(23px,6.6vw,32px);font-weight:900;color:var(--navy);line-height:1.4}
+.intro p{font-size:14px;color:var(--dim);margin-top:8px}
+.tip{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;color:var(--amber-ink);background:var(--amber-bg);border:1px solid var(--amber);border-radius:99px;padding:3px 12px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 24px rgba(23,58,94,.07);padding:18px 16px;margin-top:16px}
+.step{font-size:12px;font-weight:900;color:var(--blue);letter-spacing:.08em}
+.card h2{font-size:17px;font-weight:900;color:var(--navy);margin:2px 0 10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:900;font-size:15px;padding:13px 18px;border-radius:12px;border:none;cursor:pointer;font-family:inherit}
+.btn.navy{background:var(--navy);color:#fff}
+.btn.rec{background:var(--bad);color:#fff}
+.btn.rec.on{background:var(--bad-ink);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.75}}
+.btn.amber{background:var(--amber);color:var(--navy-2)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.src{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.src .btn{width:100%;flex-direction:column;gap:2px;padding:14px 8px}
+.src .btn small{font-size:11px;font-weight:500;opacity:.9}
+.file-name{font-size:13px;color:var(--dim);word-break:break-all;margin-top:10px}
+.msg{font-size:12.5px;color:var(--bad-ink);margin-top:6px}
+.note{font-size:12.5px;color:var(--dim);margin-top:10px}
+.lead{font-size:13.5px;margin-bottom:12px}
+
+/* ?ボタンと吹き出し */
+.q{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font-family:inherit;font-weight:900;font-size:12px;line-height:1;cursor:pointer;vertical-align:middle;margin-left:4px;padding:0;flex:none}
+.q[aria-expanded="true"]{background:var(--blue);color:#fff}
+.mixer .q{border-color:#9FB0C3;background:transparent;color:#C9D6E4;width:18px;height:18px;font-size:11px;margin-left:0}
+.mixer .q[aria-expanded="true"]{background:var(--amber);border-color:var(--amber);color:var(--navy-2)}
+#pop{position:absolute;z-index:100;width:min(300px,calc(100vw - 24px));background:#fff;border:1.5px solid var(--blue);border-radius:12px;box-shadow:0 10px 28px rgba(15,42,70,.25);padding:12px 14px;font-size:13px;line-height:1.7;color:var(--text)}
+#pop b{display:block;color:var(--navy);font-size:14px;margin-bottom:2px}
+#pop .x{position:absolute;right:6px;top:4px;border:none;background:none;font-size:18px;color:var(--dim);cursor:pointer}
+
+/* 例文 */
+.script{background:var(--amber-bg);border:1.5px solid var(--amber);border-radius:14px;padding:12px 14px;margin-top:14px}
+.script .st{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:900;color:var(--amber-ink)}
+.script .st button.more{font-family:inherit;font-weight:700;font-size:12px;padding:5px 10px;border-radius:99px;border:1.5px solid var(--amber);background:#fff;color:var(--amber-ink);cursor:pointer}
+.script ol{list-style:none;margin-top:8px;display:grid;gap:6px}
+.script li{display:flex;gap:10px;align-items:baseline;font-size:15px;font-weight:700;color:var(--navy-2);line-height:1.6}
+.script li .lv{flex:none;font-size:11px;font-weight:900;border-radius:99px;padding:1px 9px;border:1.5px solid var(--amber);background:#fff;color:var(--amber-ink);min-width:96px;text-align:center;white-space:nowrap}
+.script li .lv.big{background:var(--amber);color:var(--navy-2)}
+.script .why{font-size:12px;color:var(--amber-ink);margin-top:8px;font-weight:500}
+
+/* 固定バー(波形+再生) */
+.stickybar{position:sticky;top:0;z-index:30;background:#fff;margin:0 -16px;padding:8px 16px 10px;box-shadow:0 8px 14px -6px rgba(23,58,94,.18);border-radius:0 0 14px 14px}
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ab button{padding:8px 6px;border-radius:12px;border:2px solid var(--line);background:#fff;font-family:inherit;font-weight:900;font-size:14px;color:var(--dim);cursor:pointer;line-height:1.3}
+.ab button small{display:block;font-size:10.5px;font-weight:500}
+.ab button.off.on{border-color:var(--bad);background:var(--bad-bg);color:var(--bad-ink)}
+.ab button.eq.on{border-color:var(--teal);background:var(--teal-bg);color:var(--teal-2)}
+.canvas-wrap{width:100%;height:176px;background:#0F2A46;border-radius:12px;overflow:hidden;margin-top:8px}
+canvas{display:block;width:100%;height:100%}
+.playrow{display:flex;gap:10px;align-items:center;margin-top:8px}
+.playrow .btn{padding:8px 14px;min-width:92px;font-size:14px}
+.playrow input[type=range]{flex:1;min-width:0}
+.time{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+input[type=range]{accent-color:var(--blue)}
+.legend{display:flex;gap:4px 14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--dim);align-items:center}
+.legend i{display:inline-block;width:18px;height:8px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.legend i.dash{height:0;border-top:2px dashed #F5B84E;border-radius:0}
+.seg{display:flex;gap:6px;margin-top:10px;align-items:center;font-size:12.5px;color:var(--dim)}
+.seg button{font-family:inherit;font-weight:700;font-size:12.5px;padding:6px 12px;border-radius:99px;border:1.5px solid var(--line);background:#fff;color:var(--dim);cursor:pointer}
+.seg button.on{border-color:var(--blue);color:var(--blue);background:var(--sky)}
+.presetrow{display:flex;gap:8px;margin-top:14px}
+.presetrow select{flex:1;min-width:0;font-family:inherit;font-size:15px;font-weight:700;color:var(--navy);padding:12px 10px;border:2px solid var(--blue);border-radius:12px;background:#fff}
+.presetrow button{font-family:inherit;font-weight:700;font-size:13px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--dim);cursor:pointer}
+.ptext{margin-top:8px;font-size:13px;min-height:1.8em}
+
+/* ===== ミキサー風フェーダー ===== */
+.mixer{margin-top:12px;background:#1E2A38;border-radius:14px;padding:12px 6px 10px;display:flex;gap:2px;justify-content:center;user-select:none;-webkit-user-select:none}
+.strip{flex:1;max-width:66px;min-width:0;display:flex;flex-direction:column;align-items:center;border-radius:10px;padding:2px 0 6px}
+.strip .v{height:28px;font-size:11.5px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;display:flex;align-items:center;white-space:nowrap}
+.strip .lab{font-size:9.5px;color:#9FB0C3;height:14px;line-height:14px;font-variant-numeric:tabular-nums}
+.fader{position:relative;width:44px;height:200px;touch-action:none;outline:none;margin:0 auto}
+.strip.dis .fader{opacity:.4;pointer-events:none}
+.fader .groove{position:absolute;left:50%;top:12px;bottom:12px;width:6px;margin-left:-3px;background:#0B121A;border-radius:3px;box-shadow:inset 0 0 0 1px #3A4756}
+.fader .tick{position:absolute;left:6px;right:6px;height:1px;background:rgba(255,255,255,.16)}
+.fader .cap{position:absolute;left:3px;right:3px;height:26px;margin-top:-13px;border-radius:5px;background:linear-gradient(#E3E8EE,#9AA6B4 55%,#B7C0CB);box-shadow:0 2px 5px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.7)}
+.fader .cap::after{content:"";position:absolute;left:5px;right:5px;top:50%;height:2px;margin-top:-1px;background:#1E2A38;border-radius:1px}
+.fader:focus-visible .cap{outline:2px solid var(--amber)}
+.strip .nm{margin-top:4px;font-size:11.5px;font-weight:700;color:#E8EEF5;text-align:center;line-height:1.3;white-space:nowrap}
+.strip .nm small{display:block;font-size:9.5px;font-weight:400;color:#9FB0C3;height:12px}
+.strip .qwrap{height:20px;display:flex;align-items:center}
+.mkseg{flex-wrap:wrap}
+.auto{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:10px;font-weight:700;color:var(--navy)}
+.auto input{width:18px;height:18px}
+.tcwrap{display:flex;gap:14px;align-items:center;margin-top:16px;flex-wrap:wrap;justify-content:center}
+.tcwrap canvas{width:176px;height:176px;background:#0F2A46;border-radius:12px;flex:none}
+.tcinfo{flex:1;min-width:150px;font-size:13px;line-height:1.8}
+.tcinfo b{color:var(--navy);font-variant-numeric:tabular-nums}
+.cta{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;border-radius:20px;padding:26px 18px;margin-top:20px;text-align:center}
+.cta h2{font-size:19px;font-weight:900;line-height:1.5}
+.cta p{font-size:13.5px;color:#D6E2EE;margin-top:8px}
+.cta .btns{display:grid;gap:10px;max-width:380px;margin:16px auto 0}
+.cta .btn{width:100%}
+.cta .btn.line{background:transparent;border:1.5px solid rgba(255,255,255,.5);color:#fff}
+footer{padding:22px 16px 34px;text-align:center;font-size:12px;color:var(--dim)}
+footer a{color:var(--blue);text-decoration:underline;font-weight:700}
+[hidden]{display:none!important}
+
+/* ===== 空間系 追加 ===== */
+.mixer{gap:0;padding:10px 2px 10px;justify-content:stretch}
+.grp{display:flex;flex-direction:column;min-width:0}
+.grp.rv{flex:4}
+.grp.dl{flex:3;border-left:1px solid #3A4A5E}
+.grp .gt{height:26px;display:flex;align-items:center;justify-content:center;gap:4px;font-size:12.5px;font-weight:900;color:#fff}
+.grp .strips{display:flex;justify-content:center}
+.legend i.sw{width:14px;height:10px}
+.lanehint{font-size:12px;color:var(--dim);margin-top:6px}
+.dcwrap{margin-top:16px}
+.dcwrap h3{font-size:14px;font-weight:900;color:var(--navy);display:flex;align-items:center;gap:2px;margin-bottom:6px}
+.dcwrap canvas{width:100%;height:150px;background:#0F2A46;border-radius:12px}
+.dcnow{font-size:12.5px;line-height:1.8;margin-top:6px}
+.dcnow b{color:var(--navy);font-variant-numeric:tabular-nums}
+.ab button.eq.on{border-color:var(--teal);background:var(--teal-bg);color:var(--teal-2)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="../" data-link="header_back">← RHO MIX</a>
+    <span class="t">リバーブ・ディレイ体験</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <h1>リバーブとディレイで、<br>声に「空間」をつけよう</h1>
+    <p>声を録音して、フェーダーを動かしてみてください。<br>声のあとに伸びる「響きのしっぽ」が、目で見えます。</p>
+    <span class="tip">🎧 イヤホン・ヘッドホン推奨 / 音量は小さめから</span>
+  </div>
+
+  <section class="card">
+    <div class="step">STEP 1</div>
+    <h2>音を用意する</h2>
+    <p class="lead">リバーブ<button class="q" data-g="reverb" aria-label="リバーブの説明" aria-expanded="false">?</button>とディレイ<button class="q" data-g="delay" aria-label="ディレイの説明" aria-expanded="false">?</button>は、声が止まったあとの「余韻」で違いがわかります。言い終わったら、2〜3秒だまってください。</p>
+    <div class="src">
+      <button class="btn rec" id="btnRec"><span id="recLabel">🎤 声を録音する</span><small id="recSub">スマホのマイクでOK</small></button>
+      <button class="btn navy" id="btnFile" style="font-size:15px">📁 <span style="white-space:nowrap">ファイルを選ぶ</span><small>手持ちの音声がある人</small></button>
+    </div>
+    <input type="file" id="fileInput" accept="audio/*" hidden>
+    <p class="msg" id="recMsg" hidden></p>
+    <p class="file-name" id="fileName">まだ音が用意されていません</p>
+
+    <div class="script" id="script">
+      <div class="st"><span>🎤 録音するときの例文</span><button class="more" id="btnMore">別の例文</button></div>
+      <ol id="scriptList"></ol>
+      <p class="why">短く切った声ほど、そのあとの響き(しっぽ)がはっきり見えます。「だまる」ところが大事です。静かな場所で、マイクに近づきすぎないように録音してください。</p>
+    </div>
+    <p class="note">🔒 録音・ファイルはどこにも送信されません(ブラウザ内だけで処理します)。録音は最長60秒です。</p>
+  </section>
+
+  <section class="card">
+    <div class="step">STEP 2</div>
+    <h2>しっぽを見ながら、動かす</h2>
+
+    <div class="stickybar">
+      <div class="ab" id="ab">
+        <button id="abOff" class="off">元の音<small>声だけ</small></button>
+        <button id="abEq" class="eq on">エフェクトあり<small>フェーダーを反映</small></button>
+      </div>
+      <div class="canvas-wrap"><canvas id="wave"></canvas></div>
+      <div class="playrow">
+        <button class="btn amber" id="btnPlay" disabled>▶ 再生</button>
+        <input type="range" id="seek" min="0" max="1000" value="0" aria-label="再生位置" disabled>
+        <span class="time" id="timeTxt">0:00</span>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span><i class="sw" style="background:#8FA6BF"></i>元の声</span>
+      <span><i class="sw" style="background:#17A98D"></i>リバーブの響き</span>
+      <span><i class="sw" style="background:#F5B84E"></i>ディレイのくり返し</span>
+      <span>声のあとに伸びる線=しっぽ<button class="q" data-g="tail" aria-label="しっぽの説明" aria-expanded="false">?</button></span>
+    </div>
+    <div class="seg" id="winSeg"><span>表示の長さ</span><button data-w="3">3秒</button><button data-w="8" class="on">8秒</button><button data-w="20">20秒</button></div>
+
+    <div class="mixer" id="mixer"></div>
+    <div class="presetrow">
+      <select id="presetSel" aria-label="お題を選ぶ"></select>
+      <button id="btnReset">リセット</button>
+    </div>
+    <p class="ptext" id="ptext"></p>
+
+    <p class="note">フェーダーは、指でなぞって動かします。ダブルタップで初期値に戻ります。名前の下の「?」で、それぞれの説明が出ます。</p>
+
+    <div class="dcwrap">
+      <h3>響きの形グラフ<button class="q" data-g="decay" aria-label="響きの形グラフの説明" aria-expanded="false">?</button></h3>
+      <canvas id="dc"></canvas>
+      <p class="dcnow" id="dcNow"></p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>空間づくりは、MIXの大事な仕事です</h2>
+    <p>実際のMIXでは、曲の雰囲気や歌い方に合わせて、リバーブとディレイの種類・量・長さを細かく決めます。あなたの歌ってみたを、聴きやすく仕上げます。</p>
+    <div class="btns">
+      <a class="btn amber" id="ctaForm" href="#" target="_blank" rel="noopener" data-link="cta_form">MIXを依頼する(フォームへ)</a>
+      <a class="btn line" href="../comp/" data-link="cta_comp">コンプ体験もやってみる</a>
+      <a class="btn line" href="../eq/" data-link="cta_eq">EQ体験もやってみる</a>
+      <a class="btn line" href="../" data-link="cta_lp">料金・流れを見る</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p><a href="../" data-link="footer_mix">RHO MIX</a> / <a href="https://rowrowrho.github.io/top/?utm_source=mix_space&utm_medium=footer&utm_campaign=back_to_top" data-link="footer_top">← 歌い手ρのトップページへ</a></p>
+  <p style="margin-top:6px">※ 実際のリバーブやディレイは、機種やプラグインで音が大きく異なります。このツールは仕組みを学ぶための簡易版です(モノラルで処理しています)。</p>
+</footer>
+
+<div id="pop" hidden role="dialog"></div>
+
+<script>
+(() => {
+'use strict';
+const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScDBnkhKNUxxVmrZOpWXMTe_Q-75dTuoWCIFhULGhQDI18SsQ/viewform?usp=header';
+const track = (n,p) => { try { if (typeof gtag === 'function') gtag('event', n, p||{}); } catch(e){} };
+const $ = id => document.getElementById(id);
+const BS = 64, MAXSEC = 60, MAXTAIL = 8;
+
+// ===== 用語の説明(?) =====
+const GLOSS = {
+  reverb:['リバーブ', '声が、お風呂場やホール、教会の中で鳴っているような「響き」を足すエフェクトです。声が止まったあとも、音がしばらく残って、少しずつ消えていきます。'],
+  delay: ['ディレイ', '声を少し遅らせて、「やまびこ」のようにくり返して聞かせるエフェクトです。リバーブが「ぼんやり広がる」のに対して、ディレイは「はっきり、何度も返ってくる」音です。'],
+  rvMix: ['量(リバーブ)', 'リバーブの音を、元の声にどれだけ混ぜるかです。0%だと元の声だけ。多いほど、声が遠く、ぼんやりして聞こえます。(リバーブの音量は、元の声に合わせて自動で調整しています)'],
+  rvLen: ['長さ(リバーブタイム)', '響きが聞こえなくなるまでの長さです。正確には、音が60dB小さくなるまでの時間で、「リバーブタイム」や「RT60」と呼ばれます。短いと小さな部屋、長いと大きなホールのような響きになります。'],
+  rvPre: ['プリディレイ', '声が出てから、響きが始まるまでの待ち時間です。少し空けると、声の輪郭がはっきり残って、響きとぶつかりにくくなります。'],
+  rvDamp:['こもり(高音のカット)', '響きの高い音を、どれだけ削るかです。大きいほど響きが暗く、やわらかくなります。実際の部屋でも、高い音は壁や空気に吸われて、先に消えます。0%だと、明るくキラキラした響きになります。'],
+  dlMix: ['量(ディレイ)', 'くり返しの音を、元の声にどれだけ混ぜるかです。100%だと、1回目のくり返しが、元の声と同じ大きさになります。'],
+  dlTime:['間隔(ディレイタイム)', 'くり返しが返ってくるまでの時間です。短いと声が太くなったように、長いとはっきりしたやまびこに聞こえます。実際のMIXでは、曲のテンポに合わせることが多いです。'],
+  dlFb:  ['くり返し(フィードバック)', '返ってきた音を、もう一度ディレイに送る割合です。0%だと1回だけ、大きいほど何度もくり返して、ゆっくり消えていきます。上げすぎると、いつまでも鳴り続けます。'],
+  tail:  ['しっぽ(余韻)', '声が終わったあとも、のびている線のことです。これがエフェクトの「響き」です。声のない部分に長くのびているほど、長い響きがついています。'],
+  decay: ['響きの形グラフ', '横が時間、縦が音の大きさ(dB)です。白い線が元の声。青緑の線(リバーブ)はなめらかに消えていき、60dB下がるまでの時間が「長さ」です。オレンジの棒(ディレイ)は、くり返しごとに小さくなります。']
+};
+const pop = $('pop'); let popBtn = null;
+function closePop(){ pop.hidden = true; if (popBtn){ popBtn.setAttribute('aria-expanded','false'); popBtn = null; } }
+function openPop(btn){
+  const g = GLOSS[btn.dataset.g]; if (!g) return;
+  if (popBtn === btn){ closePop(); return; }
+  closePop(); popBtn = btn; btn.setAttribute('aria-expanded','true');
+  pop.innerHTML = '<button class="x" aria-label="閉じる">×</button><b>'+g[0]+'</b>'+g[1]; pop.hidden = false;
+  const r = btn.getBoundingClientRect(), pw = pop.offsetWidth, vw = document.documentElement.clientWidth;
+  let left = r.left + window.scrollX + r.width/2 - pw/2; left = Math.max(window.scrollX+8, Math.min(left, window.scrollX+vw-pw-8));
+  let top = r.bottom + window.scrollY + 8;
+  if (r.bottom + 8 + pop.offsetHeight > window.innerHeight && r.top > pop.offsetHeight + 16) top = r.top + window.scrollY - pop.offsetHeight - 8;
+  pop.style.left = left+'px'; pop.style.top = top+'px';
+  pop.querySelector('.x').addEventListener('click', closePop);
+  track('mix_space_help',{term:btn.dataset.g});
+}
+document.addEventListener('click', e => {
+  const q = e.target.closest('.q'); if (q){ e.preventDefault(); openPop(q); return; }
+  if (!e.target.closest('#pop')) closePop();
+});
+document.addEventListener('keydown', e => { if (e.key==='Escape') closePop(); });
+
+// ===== パラメータ =====
+const fmtMs = v => v < 1000 ? Math.round(v)+' ms' : (v/1000).toFixed(1)+' s';
+const DEFS = [
+  { key:'rvMix', grp:'rv', short:'量',     sub:'',        N:100, toVal:s=>s,                          fromVal:v=>v,                                          fmt:v=>v+'%',                top:'100%',  bot:'0%',    def:18 },
+  { key:'rvLen', grp:'rv', short:'長さ',   sub:'',        N:100, toVal:s=>Math.round(0.2*Math.pow(30,s/100)*10)/10,     fromVal:v=>Math.round(Math.log(v/0.2)/Math.log(30)*100), fmt:v=>v.toFixed(1)+' s',  top:'6 s',   bot:'0.2 s', def:1.6 },
+  { key:'rvPre', grp:'rv', short:'プリ',   sub:'ディレイ', N:40,  toVal:s=>s*5,                        fromVal:v=>v/5,                                        fmt:v=>v+' ms',              top:'200ms', bot:'0',     def:20 },
+  { key:'rvDamp',grp:'rv', short:'こもり', sub:'',        N:20,  toVal:s=>s*5,                        fromVal:v=>v/5,                                        fmt:v=>v+'%',                top:'こもる', bot:'明るい', def:50 },
+  { key:'dlMix', grp:'dl', short:'量',     sub:'',        N:100, toVal:s=>s,                          fromVal:v=>v,                                          fmt:v=>v+'%',                top:'100%',  bot:'0%',    def:10 },
+  { key:'dlTime',grp:'dl', short:'間隔',   sub:'',        N:100, toVal:s=>{ const v=50*Math.pow(20,s/100); return v<200 ? Math.round(v/5)*5 : Math.round(v/10)*10; },      fromVal:v=>Math.round(Math.log(v/50)/Math.log(20)*100),  fmt:fmtMs,                   top:'1 s',   bot:'50ms',  def:300 },
+  { key:'dlFb',  grp:'dl', short:'くり返し', sub:'FB',    N:90,  toVal:s=>s,                          fromVal:v=>v,                                          fmt:v=>v+'%',                top:'90%',   bot:'0%',    def:25 }
+];
+const P = {}, SV = {};
+function setSv(key, s){ const d = DEFS.find(x=>x.key===key); s = Math.max(0, Math.min(d.N, Math.round(s))); SV[key] = s; P[key] = d.toVal(s); }
+DEFS.forEach(d => setSv(d.key, d.fromVal(d.def)));
+
+// ===== フェーダーUI =====
+const FADER_H = 200, PAD = 12;
+const mixer = $('mixer');
+const GROUPS = [['rv','リバーブ','reverb'],['dl','ディレイ','delay']];
+GROUPS.forEach(g => {
+  const el = document.createElement('div'); el.className = 'grp '+g[0];
+  el.innerHTML = '<div class="gt">'+g[1]+'<button class="q" data-g="'+g[2]+'" aria-label="'+g[1]+'の説明" aria-expanded="false">?</button></div><div class="strips"></div>';
+  mixer.appendChild(el);
+  DEFS.filter(d => d.grp===g[0]).forEach(d => {
+    const s = document.createElement('div'); s.className='strip'; s.dataset.k = d.key;
+    let ticks=''; for (let i=0;i<=4;i++){ const y = PAD + i/4*(FADER_H-PAD*2); ticks += '<div class="tick" style="top:'+y+'px"></div>'; }
+    s.innerHTML = '<div class="v" id="v_'+d.key+'">-</div><div class="lab">'+d.top+'</div>'
+      + '<div class="fader" id="f_'+d.key+'" role="slider" tabindex="0" aria-label="'+g[1]+d.short+'" aria-valuemin="0" aria-valuemax="'+d.N+'" aria-valuenow="0">'
+      + '<div class="groove"></div>'+ticks+'<div class="cap" id="c_'+d.key+'"></div></div>'
+      + '<div class="lab">'+d.bot+'</div>'
+      + '<div class="nm">'+d.short+'<small>'+d.sub+'</small></div>'
+      + '<div class="qwrap"><button class="q" data-g="'+d.key+'" aria-label="'+g[1]+d.short+'の説明" aria-expanded="false">?</button></div>';
+    el.querySelector('.strips').appendChild(s); attachFader(s, d);
+  });
+});
+function attachFader(strip, d){
+  const f = strip.querySelector('.fader'); let dragging = false, lastTap = 0;
+  const move = e => { const r = f.getBoundingClientRect(); const t = 1 - (e.clientY - r.top - PAD)/(FADER_H - PAD*2); userSet(d.key, t*d.N); };
+  f.addEventListener('pointerdown', e => {
+    e.preventDefault(); const now = Date.now();
+    if (now - lastTap < 320){ userSet(d.key, d.fromVal(d.def)); lastTap = 0; return; }
+    lastTap = now; dragging = true; f.setPointerCapture(e.pointerId); move(e);
+  });
+  f.addEventListener('pointermove', e => { if (dragging) move(e); });
+  const end = () => { dragging = false; }; f.addEventListener('pointerup', end); f.addEventListener('pointercancel', end);
+  f.addEventListener('keydown', e => {
+    let s = SV[d.key], step = d.N >= 90 ? 2 : 1;
+    if (e.key==='ArrowUp'||e.key==='ArrowRight') s += step; else if (e.key==='ArrowDown'||e.key==='ArrowLeft') s -= step;
+    else if (e.key==='PageUp') s += d.N/10; else if (e.key==='PageDown') s -= d.N/10; else if (e.key==='Home') s = d.N; else if (e.key==='End') s = 0; else return;
+    e.preventDefault(); userSet(d.key, s);
+  });
+}
+function userSet(key, s){ setSv(key, s); $('presetSel').selectedIndex = 0; $('ptext').textContent=''; refreshFaders(); scheduleCompute(); }
+function refreshFaders(){
+  DEFS.forEach(d => {
+    const y = PAD + (1 - SV[d.key]/d.N)*(FADER_H-PAD*2); $('c_'+d.key).style.top = y+'px';
+    const txt = d.fmt(P[d.key]); $('v_'+d.key).textContent = txt;
+    const f = $('f_'+d.key); f.setAttribute('aria-valuenow', SV[d.key]); f.setAttribute('aria-valuetext', txt);
+  });
+}
+function applyParams(o){ Object.keys(o).forEach(k => { const d = DEFS.find(x=>x.key===k); setSv(k, d.fromVal(o[k])); }); refreshFaders(); scheduleCompute(); }
+const DEFAULT = {}; DEFS.forEach(d => DEFAULT[d.key] = d.def);
+
+// ===== お題 =====
+const PRESETS = [
+  { name:'歌ってみたの定番(ほんのり)', p:{rvMix:18,rvLen:1.6,rvPre:20,rvDamp:50,dlMix:10,dlTime:300,dlFb:25}, t:'リバーブは薄く、ディレイはほんの少し。声を埋もれさせずに、奥行きだけを足す考え方です。' },
+  { name:'お風呂場みたいな響き',       p:{rvMix:45,rvLen:1.2,rvPre:0, rvDamp:10,dlMix:0, dlTime:300,dlFb:25}, t:'短くて明るい響きです。タイルの壁に囲まれたような、せまい空間の感じになります。' },
+  { name:'大きなホール',               p:{rvMix:35,rvLen:3.5,rvPre:35,rvDamp:55,dlMix:0, dlTime:300,dlFb:25}, t:'長い響きで、広い空間にいる印象になります。プリディレイを空けて、声の輪郭を残しています。' },
+  { name:'やまびこ(ディレイだけ)',     p:{rvMix:0, rvLen:1.6,rvPre:20,rvDamp:50,dlMix:50,dlTime:400,dlFb:45}, t:'リバーブはゼロ。はっきりした「やっほー」のくり返しだけが聞こえます。' },
+  { name:'かけすぎてみる(失敗例)',     p:{rvMix:80,rvLen:5.5,rvPre:0, rvDamp:0, dlMix:60,dlTime:250,dlFb:75}, t:'響きが多すぎると、言葉がぼやけて、何を歌っているのか聞き取りにくくなります。' },
+  { name:'何もしない(量0%)',           p:{rvMix:0, rvLen:1.6,rvPre:20,rvDamp:50,dlMix:0, dlTime:300,dlFb:25}, t:'リバーブもディレイもゼロ。元の声と同じ状態です。' }
+];
+const sel = $('presetSel');
+sel.innerHTML = '<option value="">お題を選ぶ…</option>' + PRESETS.map((p,i)=>'<option value="'+i+'">'+p.name+'</option>').join('');
+sel.addEventListener('change', () => {
+  if (sel.value==='') { $('ptext').textContent=''; return; }
+  const p = PRESETS[+sel.value]; applyParams(p.p); $('ptext').textContent = p.t; track('mix_space_preset',{preset:p.name});
+});
+$('btnReset').addEventListener('click', () => { applyParams(DEFAULT); sel.selectedIndex=0; $('ptext').textContent=''; });
+
+// ===== 録音の例文 =====
+const SCRIPTS = [
+  [['短く切って','ハイ! ……(2秒だまる)'], ['のばして','やっほー! ……(3秒だまる)'], ['小さな声で','ありがとう。……(3秒だまる)']],
+  [['短く切って','タン! ……(2秒だまる)'],  ['のばして','おーい! ……(3秒だまる)'],   ['小さな声で','おはよう。……(3秒だまる)']],
+  [['短く切って','ポン! ……(2秒だまる)'],  ['のばして','いくよー! ……(3秒だまる)'], ['小さな声で','またね。……(3秒だまる)']]
+];
+let scriptIdx = 0;
+function renderScript(){
+  $('scriptList').innerHTML = SCRIPTS[scriptIdx].map((l,i) => '<li><span class="lv'+(i===1?' big':'')+'">'+(i+1)+'. '+l[0]+'</span><span>'+l[1]+'</span></li>').join('');
+}
+$('btnMore').addEventListener('click', () => { scriptIdx = (scriptIdx+1) % SCRIPTS.length; renderScript(); });
+renderScript();
+
+// ===== データ =====
+let sr = 44100, n = 0, orig = null;
+let origPeak = 1, origRms = 0;
+let rev = null, dly = null, revSig = null, dlySig = null, revNorm = 0, revTail = 0, dlyTail = 0;
+let oMin=null,oMax=null,rMin=null,rMax=null,dMin=null,dMax=null;
+let dur = 0, pos = 0;
+
+function summarize(x, L, mn, mx){
+  for (let b=0;b<mn.length;b++){
+    const s = b*BS; if (s >= L || s >= x.length){ mn[b]=0; mx[b]=0; continue; }
+    let lo=1, hi=-1; const e=Math.min(x.length, L, s+BS);
+    for (let i=s;i<e;i++){ const v=x[i]; if(v<lo)lo=v; if(v>hi)hi=v; }
+    mn[b]=lo; mx[b]=hi;
+  }
+}
+function setSource(x, sampleRate){
+  stopPlayback(); orig = x; sr = sampleRate; n = x.length;
+  let pk=0, s2=0; for (let i=0;i<n;i++){ const a=Math.abs(x[i]); if(a>pk)pk=a; s2+=x[i]*x[i]; }
+  origPeak = Math.max(pk,1e-4); origRms = Math.sqrt(s2/n);
+  const total = n + Math.ceil(MAXTAIL*sr) + BS;
+  rev = new Float32Array(total); dly = new Float32Array(total); revSig = dlySig = null;
+  const nb = Math.ceil(total/BS);
+  oMin=new Float32Array(nb); oMax=new Float32Array(nb); rMin=new Float32Array(nb); rMax=new Float32Array(nb); dMin=new Float32Array(nb); dMax=new Float32Array(nb);
+  summarize(x, n, oMin, oMax); pos = 0;
+  $('btnPlay').disabled = false; $('seek').disabled = false; compute();
+}
+
+// ===== リバーブ(フリーバーブ風:8本のコム+4本のオールパス。長さはRT60から計算) =====
+function computeRev(){
+  const rt = P.rvLen, d = 0.85*P.rvDamp/100, pre = Math.round(P.rvPre/1000*sr), sc = sr/44100;
+  const CL = [1116,1188,1277,1356,1422,1491,1557,1617].map(v=>Math.round(v*sc)), AL = [556,441,341,225].map(v=>Math.round(v*sc));
+  const cb = CL.map(l=>new Float32Array(l)), ci = new Int32Array(8), cl = new Float32Array(8), cg = CL.map(l=>Math.pow(10, -3*l/(rt*sr)));
+  const ab = AL.map(l=>new Float32Array(l)), ai = new Int32Array(4);
+  const pb = new Float32Array(Math.max(1,pre)); let pi = 0;
+  revTail = Math.min(MAXTAIL, rt*0.85 + P.rvPre/1000);
+  const L = Math.min(rev.length, n + Math.ceil(revTail*sr));
+  let s2 = 0;
+  for (let i=0;i<L;i++){
+    let x = i<n ? orig[i] : 0;
+    if (pre>0){ const t = pb[pi]; pb[pi] = x; if (++pi>=pre) pi = 0; x = t; }
+    x *= 0.05;
+    let sum = 0;
+    for (let c=0;c<8;c++){ const buf=cb[c], k=ci[c], y=buf[k]; cl[c] = y*(1-d) + cl[c]*d; buf[k] = x + cl[c]*cg[c]; ci[c] = (k+1===buf.length) ? 0 : k+1; sum += y; }
+    for (let a=0;a<4;a++){ const buf=ab[a], k=ai[a], bo=buf[k], o = -sum + bo; buf[k] = sum + bo*0.5; ai[a] = (k+1===buf.length) ? 0 : k+1; sum = o; }
+    rev[i] = sum; s2 += sum*sum;
+  }
+  rev.fill(0, L);
+  revNorm = (s2>1e-18 && origRms>1e-9) ? origRms/Math.sqrt(s2/L) : 0;
+  return L;
+}
+// ===== ディレイ(帰還つき。くり返しのたびに、少し高音が丸くなる) =====
+function computeDly(){
+  const D = Math.max(1, Math.round(P.dlTime/1000*sr)), fb = P.dlFb/100, buf = new Float32Array(D);
+  const reps = fb > 0.01 ? Math.ceil(Math.log(0.00316)/Math.log(fb)) : 1;
+  dlyTail = Math.min(MAXTAIL, (reps+1)*D/sr);
+  const L = Math.min(dly.length, n + Math.ceil(dlyTail*sr));
+  let k = 0, lp = 0;
+  for (let i=0;i<L;i++){
+    const w = buf[k]; lp += 0.65*(w-lp);
+    buf[k] = (i<n ? orig[i] : 0) + fb*lp; if (++k>=D) k = 0; dly[i] = w;
+  }
+  dly.fill(0, L);
+  return L;
+}
+function compute(){
+  if (!orig) return;
+  const rs = [P.rvLen,P.rvPre,P.rvDamp].join('|'), ds = [P.dlTime,P.dlFb].join('|');
+  if (rs !== revSig){ const L = computeRev(); revSig = rs; summarize(rev, L, rMin, rMax); }
+  if (ds !== dlySig){ const L = computeDly(); dlySig = ds; summarize(dly, L, dMin, dMax); }
+  const tail = Math.max(0.3, P.rvMix>0 ? revTail : 0, P.dlMix>0 ? dlyTail : 0);
+  dur = Math.min(n/sr + tail, rev.length/sr - 0.01); if (pos > dur) pos = 0;
+  updateSeekUi(); scheduleAudioRefresh();
+}
+let compTimer = null;
+function scheduleCompute(){ if (compTimer) return; compTimer = setTimeout(() => { compTimer=null; if (orig) compute(); else refreshFaders(); }, 40); }
+
+// ===== 再生 =====
+let ctx=null, origBuf=null, effBuf=null, srcO=null, srcC=null, gO=null, gC=null, useEff=true;
+let playing = false, t0 = 0, off0 = 0;
+function ensureCtx(){ if (!ctx){ ctx = new (window.AudioContext||window.webkitAudioContext)(); } if (ctx.state==='suspended') ctx.resume(); }
+function buildBuffers(){
+  const T = Math.min(Math.ceil(dur*sr), rev.length), o = new Float32Array(T), e = new Float32Array(T);
+  const rw = P.rvMix/100*revNorm, dw = P.dlMix/100; let pk = 0;
+  for (let i=0;i<T;i++){ const x = i<n ? orig[i] : 0; o[i] = x; let v = x; if (rw>0) v += rw*rev[i]; if (dw>0) v += dw*dly[i]; e[i] = v; const a = v<0?-v:v; if (a>pk) pk = a; }
+  if (pk > 0.98){ const s = 0.98/pk; for (let i=0;i<T;i++) e[i] *= s; }
+  origBuf = ctx.createBuffer(1, T, sr); origBuf.copyToChannel(o,0);
+  effBuf = ctx.createBuffer(1, T, sr); effBuf.copyToChannel(e,0);
+}
+function startSources(offset){
+  stopSources(); if (!ctx || !orig) return; buildBuffers();
+  gO = ctx.createGain(); gC = ctx.createGain(); applyABGains(true); gO.connect(ctx.destination); gC.connect(ctx.destination);
+  srcO = ctx.createBufferSource(); srcO.buffer = origBuf; srcO.loop = true; srcO.connect(gO);
+  srcC = ctx.createBufferSource(); srcC.buffer = effBuf; srcC.loop = true; srcC.connect(gC);
+  const when = ctx.currentTime + 0.02; srcO.start(when, offset % (effBuf.length/sr)); srcC.start(when, offset % (effBuf.length/sr));
+}
+function stopSources(){ [srcO,srcC].forEach(s => { if (s){ try{ s.stop(); }catch(e){} try{ s.disconnect(); }catch(e){} } }); srcO=srcC=null; }
+function applyABGains(now){
+  if (!gO) return; const t = ctx.currentTime;
+  if (now){ gO.gain.value = useEff?0:1; gC.gain.value = useEff?1:0; } else { gO.gain.setTargetAtTime(useEff?0:1, t, 0.01); gC.gain.setTargetAtTime(useEff?1:0, t, 0.01); }
+}
+let refreshTimer=null;
+function scheduleAudioRefresh(){
+  if (!playing || refreshTimer) return;
+  refreshTimer = setTimeout(() => { refreshTimer=null; if (playing){ off0 = curPos(); t0 = performance.now(); startSources(off0); } }, 90);
+}
+function curPos(){ return playing ? (off0 + (performance.now()-t0)/1000) % dur : pos; }
+function startPlayback(){ if (!orig) return; ensureCtx(); playing = true; off0 = pos; t0 = performance.now(); startSources(off0); $('btnPlay').textContent = '■ 停止'; track('mix_space_play'); }
+function stopPlayback(){ if (playing) pos = curPos(); playing = false; stopSources(); $('btnPlay').textContent = '▶ 再生'; }
+$('btnPlay').addEventListener('click', () => { playing ? stopPlayback() : startPlayback(); });
+$('abEq').addEventListener('click', () => { useEff = true; setAB(); track('mix_space_ab',{mode:'effect'}); });
+$('abOff').addEventListener('click', () => { useEff = false; setAB(); track('mix_space_ab',{mode:'off'}); });
+function setAB(){ $('abEq').className='eq'+(useEff?' on':''); $('abOff').className='off'+(useEff?'':' on'); applyABGains(false); }
+const seek = $('seek'), fmt = s => Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+function updateSeekUi(){ seek.value = dur ? Math.round(pos/dur*1000) : 0; $('timeTxt').textContent = fmt(pos)+' / '+fmt(dur); }
+seek.addEventListener('input', () => { if (!orig) return; pos = seek.value/1000*dur; if (playing){ off0 = pos; t0 = performance.now(); startSources(off0); } updateSeekUi(); });
+let WIN = 8;
+document.querySelectorAll('#winSeg button').forEach(b => b.addEventListener('click', () => { WIN = +b.dataset.w; document.querySelectorAll('#winSeg button').forEach(x=>x.classList.toggle('on', x===b)); }));
+
+// ===== 音の入力(ファイル / 録音) =====
+function loadBuffer(abuf, label){
+  const ch0 = abuf.getChannelData(0), len = Math.min(abuf.length, Math.floor(abuf.sampleRate*MAXSEC)), x = new Float32Array(len);
+  if (abuf.numberOfChannels > 1){ const ch1 = abuf.getChannelData(1); for (let i=0;i<len;i++) x[i] = (ch0[i]+ch1[i])*0.5; } else x.set(ch0.subarray(0,len));
+  setSource(x, abuf.sampleRate);
+  $('fileName').textContent = label + (abuf.length > len ? '(最初の60秒を使います)' : '');
+}
+$('btnFile').addEventListener('click', () => { ensureCtx(); $('fileInput').click(); });
+$('fileInput').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return; ensureCtx(); $('recMsg').hidden = true;
+  try { const buf = await ctx.decodeAudioData(await f.arrayBuffer()); loadBuffer(buf, f.name); track('mix_space_file_load'); }
+  catch (err){ $('recMsg').hidden=false; $('recMsg').textContent='この音声ファイルは読み込めませんでした。別の形式(WAV・MP3・M4Aなど)でお試しください。'; }
+});
+let rec=null, recStream=null, recChunks=[], recTimer=null, recT0=0;
+const canRec = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+if (!canRec){ $('btnRec').hidden = true; $('btnFile').parentElement.style.gridTemplateColumns='1fr'; $('script').hidden = true; }
+function setRecUi(on){ $('btnRec').classList.toggle('on', on); $('recLabel').textContent = on ? '■ 録音を止める' : '🎤 声を録音する'; $('recSub').textContent = on ? '録音中… 0:00' : 'スマホのマイクでOK'; }
+async function startRec(){
+  ensureCtx(); stopPlayback(); $('recMsg').hidden = true;
+  try { recStream = await navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:false, noiseSuppression:false, autoGainControl:false } }); }
+  catch (e){ $('recMsg').hidden=false; $('recMsg').textContent='マイクが使えませんでした。ブラウザのマイクの許可を確認するか、「ファイルを選ぶ」をお使いください。'; return; }
+  const types = ['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus'];
+  const mt = types.find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t));
+  rec = mt ? new MediaRecorder(recStream, {mimeType:mt}) : new MediaRecorder(recStream); recChunks = [];
+  rec.ondataavailable = e => { if (e.data && e.data.size) recChunks.push(e.data); };
+  rec.onstop = async () => {
+    clearInterval(recTimer); recStream.getTracks().forEach(t=>t.stop()); setRecUi(false);
+    const blob = new Blob(recChunks, {type: rec.mimeType || 'audio/webm'}), sec = (Date.now()-recT0)/1000;
+    try { const buf = await ctx.decodeAudioData(await blob.arrayBuffer()); loadBuffer(buf, '録音した音声('+fmt(sec)+')'); track('mix_space_record_done',{sec:Math.round(sec)}); }
+    catch (e){ $('recMsg').hidden=false; $('recMsg').textContent='録音を読み込めませんでした。もう一度お試しください。'; }
+  };
+  rec.start(); recT0 = Date.now(); setRecUi(true); track('mix_space_record_start');
+  recTimer = setInterval(() => { const s=(Date.now()-recT0)/1000; $('recSub').textContent='録音中… '+fmt(s); if (s>=MAXSEC) stopRec(); }, 250);
+}
+function stopRec(){ if (rec && rec.state!=='inactive') rec.stop(); }
+$('btnRec').addEventListener('click', () => { (rec && rec.state==='recording') ? stopRec() : startRec(); });
+
+// ===== 描画:3つの段(元の声 / リバーブ / ディレイ) =====
+const wv = $('wave'), w2 = wv.getContext('2d'), dc = $('dc'), d2 = dc.getContext('2d');
+let W=0,H=0,dpr=1, DW=0, DH=0;
+function resize(){
+  dpr=Math.min(window.devicePixelRatio||1,2);
+  let r=wv.getBoundingClientRect(); W=r.width; H=r.height; wv.width=W*dpr; wv.height=H*dpr; w2.setTransform(dpr,0,0,dpr,0,0);
+  r=dc.getBoundingClientRect(); DW=r.width; DH=r.height; dc.width=DW*dpr; dc.height=DH*dpr; d2.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener('resize', resize); resize();
+function pill(c, text, x, y, color){
+  c.font='bold 11px sans-serif'; c.textBaseline='middle'; const tw = c.measureText(text).width;
+  c.fillStyle='rgba(15,42,70,.78)'; c.fillRect(x-3,y-8,tw+8,16); c.fillStyle=color; c.fillText(text,x+1,y);
+}
+function drawWave(){
+  w2.clearRect(0,0,W,H);
+  if (!orig){ w2.fillStyle='rgba(255,255,255,.6)'; w2.font='bold 14px sans-serif'; w2.textAlign='center'; w2.textBaseline='middle'; w2.fillText('音を用意すると、ここに波形が出ます', W/2, H/2); w2.textAlign='left'; return; }
+  const p = playing ? curPos() : pos, vs = Math.max(0, Math.min(Math.max(0,dur-WIN), p - WIN*0.25));
+  const s0 = vs*sr, spp = (WIN*sr)/W, gap = 3, lh = (H - gap*2)/3;
+  const amp = (v,m) => v<=0 ? 0 : Math.sqrt(v*m/origPeak)*(lh/2*0.92); // 小さな響きも見えるよう、平方根で表示
+  const lanes = [
+    { name:'元の声', mn:oMin, mx:oMax, mul:1, color:'rgba(143,166,191,.95)', tc:'#C9D6E4', on:true },
+    { name:'リバーブ '+(P.rvMix>0 ? P.rvMix+'%' : 'オフ'), mn:rMin, mx:rMax, mul:P.rvMix/100*revNorm, color:'rgba(23,169,141,.95)', tc:'#6FE0C8', on:P.rvMix>0 },
+    { name:'ディレイ '+(P.dlMix>0 ? P.dlMix+'%' : 'オフ'), mn:dMin, mx:dMax, mul:P.dlMix/100, color:'rgba(245,184,78,.95)', tc:'#F9D08A', on:P.dlMix>0 }
+  ];
+  lanes.forEach((ln,li) => {
+    const y0 = li*(lh+gap), mid = y0 + lh/2;
+    w2.fillStyle='rgba(255,255,255,.05)'; w2.fillRect(0,y0,W,lh);
+    w2.strokeStyle='rgba(255,255,255,.13)'; w2.lineWidth=1; w2.beginPath(); w2.moveTo(0,mid); w2.lineTo(W,mid); w2.stroke();
+    if (ln.on){
+      w2.fillStyle = ln.color;
+      for (let x=0;x<W;x++){
+        const b0 = Math.max(0,Math.floor((s0+x*spp)/BS)), b1 = Math.min(ln.mn.length, Math.max(b0+1, Math.ceil((s0+(x+1)*spp)/BS))); if (b0>=b1) continue;
+        let lo=1,hi=-1; for (let b=b0;b<b1;b++){ if(ln.mn[b]<lo)lo=ln.mn[b]; if(ln.mx[b]>hi)hi=ln.mx[b]; }
+        const yA = mid - Math.min(amp(hi,ln.mul), lh/2), yB = mid + Math.min(amp(-lo,ln.mul), lh/2);
+        w2.fillRect(x, Math.min(yA,yB), 1, Math.max(1, Math.abs(yB-yA)));
+      }
+    }
+    pill(w2, ln.name, 4, y0+10, ln.tc);
+  });
+  // 声のおわり
+  const ex = (n - s0)/spp;
+  if (ex > 0 && ex < W){ w2.setLineDash([4,4]); w2.strokeStyle='rgba(255,255,255,.6)'; w2.lineWidth=1.2; w2.beginPath(); w2.moveTo(ex,0); w2.lineTo(ex,H); w2.stroke(); w2.setLineDash([]); pill(w2,'声のおわり',Math.min(ex+4,W-62),lh+gap+lh-10,'#fff'); }
+  const px = (p*sr - s0)/spp; w2.strokeStyle='#fff'; w2.lineWidth=1.5; w2.beginPath(); w2.moveTo(px,0); w2.lineTo(px,H); w2.stroke();
+  w2.fillStyle='rgba(255,255,255,.6)'; w2.font='10px sans-serif'; w2.textBaseline='bottom'; w2.textAlign='left';
+  const step = WIN<=3?0.5:WIN<=8?1:2;
+  for (let t=Math.ceil(vs/step)*step; t<=vs+WIN; t+=step){ const x=((t-vs)/WIN)*W; w2.fillRect(x,H-4,1,4); w2.fillText(t.toFixed(step<1?1:0)+'s', x+2, H-3); }
+}
+// ===== 描画:響きの形グラフ =====
+function drawDecay(){
+  const c = d2, ml = 34, mr = 10, mt = 28, mb = 20, gw = DW-ml-mr, gh = DH-mt-mb;
+  c.clearRect(0,0,DW,DH);
+  const rt = P.rvLen, pre = P.rvPre/1000, fb = P.dlFb/100, D = P.dlTime/1000;
+  const rvEnd = Math.min(MAXTAIL, pre + rt), reps = fb>0.01 ? Math.ceil(Math.log(0.001)/Math.log(fb)) : 0;
+  const dlEnd = Math.min(MAXTAIL, D*(reps+1));
+  const Tmax = Math.max(1, P.rvMix>0 ? rvEnd : 0, P.dlMix>0 ? dlEnd : 0);
+  const X = t => ml + t/Tmax*gw, Y = db => mt + (-db)/60*gh;
+  c.font='10px sans-serif'; c.textBaseline='middle'; c.textAlign='right'; c.lineWidth=1;
+  [0,-20,-40,-60].forEach(db => { c.strokeStyle='rgba(255,255,255,.13)'; c.beginPath(); c.moveTo(ml,Y(db)); c.lineTo(ml+gw,Y(db)); c.stroke(); c.fillStyle='rgba(255,255,255,.6)'; c.fillText(db+'dB', ml-4, Y(db)); });
+  const ts = Tmax<=2?0.5:Tmax<=5?1:2; c.textAlign='center'; c.textBaseline='top';
+  for (let t=0;t<=Tmax+1e-6;t+=ts){ c.fillStyle='rgba(255,255,255,.6)'; c.fillText(t+'s', X(t), mt+gh+4); c.strokeStyle='rgba(255,255,255,.07)'; c.beginPath(); c.moveTo(X(t),mt); c.lineTo(X(t),mt+gh); c.stroke(); }
+  // 元の声
+  c.strokeStyle='#C9D6E4'; c.lineWidth=3; c.beginPath(); c.moveTo(X(0)+1,Y(0)); c.lineTo(X(0)+1,Y(-60)); c.stroke();
+  c.font='bold 10.5px sans-serif'; c.textAlign='left'; c.textBaseline='middle';
+  [['元の声','#C9D6E4'],['リバーブ(線)','#17A98D'],['ディレイ(棒)','#F5B84E']].reduce((x,l) => { c.fillStyle=l[1]; c.fillRect(x,9,10,10); c.fillStyle='#E8EEF5'; c.fillText(l[0], x+14, 14); return x + 14 + c.measureText(l[0]).width + 12; }, ml);
+  // リバーブ
+  if (P.rvMix>0){
+    const s = 20*Math.log10(P.rvMix/100), tEnd = pre + rt*(60+s)/60; // sから-60dBまでの時間
+    const tc = Math.min(Tmax,tEnd); c.strokeStyle='#17A98D'; c.lineWidth=3.5; c.beginPath(); c.moveTo(X(pre),Y(s)); c.lineTo(X(tc), Y(Math.max(-60, s - 60*(tc-pre)/rt))); c.stroke();
+  }
+  // ディレイ
+  if (P.dlMix>0){
+    const base = 20*Math.log10(P.dlMix/100); c.strokeStyle='#F5B84E'; c.fillStyle='#F5B84E';
+    const kmax = fb>0.01 ? reps+1 : 1;
+    for (let k=1;k<=kmax;k++){
+      const t = k*D, lvl = base + (k-1)*20*Math.log10(Math.max(fb,1e-3)); if (t>Tmax || lvl<-60) break;
+      c.lineWidth=3; c.beginPath(); c.moveTo(X(t),Y(-60)); c.lineTo(X(t),Y(lvl)); c.stroke(); c.beginPath(); c.arc(X(t),Y(lvl),3.5,0,6.283); c.fill();
+    }
+  }
+  c.textAlign='left';
+  const rtxt = P.rvMix>0 ? 'リバーブ:60dB下がるまで <b>'+P.rvLen.toFixed(1)+'秒</b>(声の'+P.rvPre+'ms後から)' : 'リバーブ:オフ';
+  const dtxt = P.dlMix>0 ? 'ディレイ:<b>'+Math.round(P.dlTime)+'ms</b>ごとに返り、1回ごとに<b>'+(fb>0.01 ? (20*Math.log10(fb)).toFixed(1)+'dB' : 'くり返しなし')+'</b>' : 'ディレイ:オフ';
+  const html = rtxt+'<br>'+dtxt; if ($('dcNow').dataset.h !== html){ $('dcNow').innerHTML = html; $('dcNow').dataset.h = html; }
+}
+function frame(){
+  requestAnimationFrame(frame);
+  if (playing){ pos = curPos(); updateSeekUi(); }
+  drawWave(); drawDecay();
+}
+
+// ===== 起動 =====
+refreshFaders(); frame();
+$('ctaForm').href = FORM_URL;
+document.querySelectorAll('[data-link]').forEach(a => a.addEventListener('click', () => track('mix_space_link',{link:a.dataset.link})));
+window.__sp = { P, SV, get orig(){return orig;}, get playing(){return playing;}, get pos(){return pos;}, get dur(){return dur;}, get revNorm(){return revNorm;}, get revTail(){return revTail;}, get dlyTail(){return dlyTail;}, compute, setSource, get rev(){return rev;}, get dly(){return dly;} };
+})();
+</script>
+</body>
+</html>
