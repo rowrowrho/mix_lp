@@ -335,6 +335,11 @@
             <span class="ti-desc">しきい値やレシオなどの数値を動かして、波形がどう変わるかを目で見て、耳で聞き比べ。仕組みがひと目で分かります。</span>
             <span class="ti-go">コンプを体験する →</span>
           </a>
+          <a class="tool-item js-space" data-pos="mix_experience" href="space/">
+            <span class="ti-name">リバーブ・ディレイ体験</span>
+            <span class="ti-desc">声のあとに伸びる「響きのしっぽ」を、波形で見ながら調整。リバーブとディレイで、声に空間をつける感覚を体験できます。</span>
+            <span class="ti-go">空間系を体験する →</span>
+          </a>
         </div>
       </div>
     </div>
@@ -427,6 +432,9 @@
   });
   document.querySelectorAll('.js-comp').forEach((a) => {
     a.addEventListener('click', () => track('mix_comp_click', { position: a.dataset.pos }));
+  });
+  document.querySelectorAll('.js-space').forEach((a) => {
+    a.addEventListener('click', () => track('mix_space_click', { position: a.dataset.pos }));
   });
   document.querySelectorAll('.js-checker').forEach((a) => {
     a.addEventListener('click', () => track('mix_checker_click', { position: a.dataset.pos }));
