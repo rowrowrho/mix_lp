@@ -131,6 +131,14 @@ input[type=range]{accent-color:var(--blue)}
 footer{padding:22px 16px 34px;text-align:center;font-size:12px;color:var(--dim)}
 footer a{color:var(--blue);text-decoration:underline;font-weight:700}
 [hidden]{display:none!important}
+
+/* ===== 体験メニュー(3つの体験ページ共通) ===== */
+.xnav{display:flex;gap:6px;flex-wrap:wrap;align-items:stretch;justify-content:center;padding:14px 0 0}
+.xnav .xl{width:100%;text-align:center;font-size:11.5px;font-weight:900;color:var(--dim);letter-spacing:.08em}
+.xnav a,.xnav span.on{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:92px;padding:6px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font-size:13px;font-weight:900;line-height:1.3}
+.xnav a small,.xnav span.on small{font-size:10px;font-weight:500;color:var(--dim)}
+.xnav span.on{border-color:var(--navy);background:var(--navy);color:#fff}
+.xnav span.on small{color:#C9D6E4}
 </style>
 </head>
 <body>
@@ -143,6 +151,8 @@ footer a{color:var(--blue);text-decoration:underline;font-weight:700}
 </header>
 
 <main class="wrap">
+  <nav class="xnav" aria-label="体験メニュー"><span class="xl">体験メニュー</span><a href="../EQ/" data-link="xnav_eq">EQ<small>ひらく →</small></a><span class="on" aria-current="page">コンプ<small>表示中</small></span><a href="../space/" data-link="xnav_space">リバーブ・ディレイ<small>ひらく →</small></a></nav>
+
   <div class="intro">
     <h1>コンプレッサーで、<br>波形はどう変わる？</h1>
     <p>例文を録音して、フェーダーを動かしてみてください。<br>波形がリアルタイムに変わり、耳でも聞き比べできます。</p>
@@ -190,7 +200,7 @@ footer a{color:var(--blue);text-decoration:underline;font-weight:700}
       <span><i style="background:#8FA6BF"></i>元の波形</span>
       <span><i style="background:#17A98D"></i>コンプ後の波形</span>
       <span><i class="dash"></i>しきい値</span>
-      <span>下の帯=圧縮量<button class="q" data-g="gr" aria-label="圧縮量の説明" aria-expanded="false">?</button></span>
+      <span>下の帯=GR(ゲインリダクション)<button class="q" data-g="gr" aria-label="GRの説明" aria-expanded="false">?</button></span>
     </div>
     <div class="seg" id="winSeg"><span>表示の長さ</span><button data-w="1">1秒</button><button data-w="3" class="on">3秒</button><button data-w="8">8秒</button></div>
 
@@ -219,6 +229,7 @@ footer a{color:var(--blue);text-decoration:underline;font-weight:700}
     <div class="btns">
       <a class="btn amber" id="ctaForm" href="#" target="_blank" rel="noopener" data-link="cta_form">MIXを依頼する(フォームへ)</a>
       <a class="btn line" href="../EQ/" data-link="cta_eq">EQ体験もやってみる</a>
+      <a class="btn line" href="../space/" data-link="cta_space">リバーブ・ディレイ体験もやってみる</a>
       <a class="btn line" href="../" data-link="cta_lp">料金・流れを見る</a>
     </div>
   </section>
@@ -248,7 +259,7 @@ const GLOSS = {
   rel:  ['リリース', '音が小さくなってから、圧縮が元に戻るまでの時間です。短いと素早く戻り、長いとゆっくり戻ります。'],
   knee: ['ニー', 'しきい値まわりの「かかり始め」のなめらかさです。大きいほど、じわっと自然に効き始めます。0だと、しきい値を超えた瞬間にカクッと効きます。'],
   mk:   ['メイクアップゲイン', '圧縮で小さくなった音量を、持ち上げる設定です。全体を大きくできます。ここでは「オフ」(持ち上げない)、「自動」(元の音と同じ大きさに自動でそろえる)、「手動」(このフェーダーで自分で決める)から選べます。'],
-  gr:   ['圧縮量', 'コンプが、いま音をどれだけ小さくしているかを示す帯です。上から長く伸びているほど、強く圧縮しています。'],
+  gr:   ['GR(ゲインリダクション)', 'コンプが、いま音を何dB小さくしているかを示す帯です。「圧縮量」とも呼ばれ、コンプのメーターにも「GR」と表示されます。下に長く伸びているほど、強く圧縮しています。'],
   tc:   ['入出力グラフ', '横が「入ってくる音量」、縦が「出ていく音量」です。斜めの点線が、コンプなしの状態。しきい値を超えると、線が寝て、大きい音ほど抑えられます。再生中は、いまの音量が白い点で動きます。'],
   auto: ['メイクアップの切り替え', 'オフ:持ち上げません(圧縮した分だけ小さくなります)。自動:コンプあり／なしの聞こえる大きさをそろえて、効き方だけを比べられます(大きい方が良い音に聞こえる錯覚を避けるため)。手動:メイクのフェーダーで、自分で決めます。'],
   cons: ['子音(k・t・pなど)', '「か」「た」「ぱ」などの子音は、一瞬だけ大きく飛び出しやすい音です。コンプで抑える対象になりやすく、波形でも変化が見やすくなります。']
@@ -541,7 +552,7 @@ function drawWave(){
     let g=0; for (let b=b0;b<b1;b++) if (gMin[b]<g) g=gMin[b];
     const h = Math.min(1, -g/24)*GRH; if (h>0) w2.fillRect(x,gy,1,h);
   }
-  w2.fillStyle='rgba(255,255,255,.75)'; w2.font='10px sans-serif'; w2.textBaseline='top'; w2.fillText('圧縮量', 6, gy+3);
+  w2.fillStyle='rgba(255,255,255,.75)'; w2.font='10px sans-serif'; w2.textBaseline='top'; w2.fillText('GR(ゲインリダクション)', 6, gy+3);
   const px = (p*sr - s0)/spp; w2.strokeStyle='#fff'; w2.lineWidth=1.5; w2.beginPath(); w2.moveTo(px,0); w2.lineTo(px,H); w2.stroke();
   w2.fillStyle='rgba(255,255,255,.55)'; w2.font='10px sans-serif'; w2.textBaseline='bottom';
   const step = WIN<=1?0.25:WIN<=3?0.5:1;
@@ -569,7 +580,7 @@ function frame(){
   if (playing){ pos = curPos(); updateSeekUi(); }
   drawWave();
   const lv = playing ? levelAt(pos) : null; drawTC(lv);
-  $('tcNow').innerHTML = lv ? ('いまの入力 <b>'+lv.lvl.toFixed(1)+' dB</b><br>→ 出力 <b>'+transfer(lv.lvl).toFixed(1)+' dB</b><br>圧縮量 <b>'+Math.abs(lv.gr).toFixed(1)+' dB</b>') : '再生すると、いまの音量がここに出ます。';
+  $('tcNow').innerHTML = lv ? ('いまの入力 <b>'+lv.lvl.toFixed(1)+' dB</b><br>→ 出力 <b>'+transfer(lv.lvl).toFixed(1)+' dB</b><br>GR <b>'+Math.abs(lv.gr).toFixed(1)+' dB</b>') : '再生すると、いまの音量がここに出ます。';
 }
 
 // ===== 起動 =====
