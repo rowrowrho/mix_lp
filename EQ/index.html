@@ -99,6 +99,14 @@ canvas{display:block;width:100%;height:100%}
 footer{padding:22px 16px 34px;text-align:center;font-size:12px;color:var(--dim)}
 footer a{color:var(--blue);text-decoration:underline;font-weight:700}
 [hidden]{display:none!important}
+
+/* ===== 体験メニュー(3つの体験ページ共通) ===== */
+.xnav{display:flex;gap:6px;flex-wrap:wrap;align-items:stretch;justify-content:center;padding:14px 0 0}
+.xnav .xl{width:100%;text-align:center;font-size:11.5px;font-weight:900;color:var(--dim);letter-spacing:.08em}
+.xnav a,.xnav span.on{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:92px;padding:6px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--navy);font-size:13px;font-weight:900;line-height:1.3}
+.xnav a small,.xnav span.on small{font-size:10px;font-weight:500;color:var(--dim)}
+.xnav span.on{border-color:var(--navy);background:var(--navy);color:#fff}
+.xnav span.on small{color:#C9D6E4}
 </style>
 </head>
 <body>
@@ -111,6 +119,8 @@ footer a{color:var(--blue);text-decoration:underline;font-weight:700}
 </header>
 
 <main class="wrap">
+  <nav class="xnav" aria-label="体験メニュー"><span class="xl">体験メニュー</span><span class="on" aria-current="page">EQ<small>表示中</small></span><a href="../comp/" data-link="xnav_comp">コンプ<small>ひらく →</small></a><a href="../space/" data-link="xnav_space">リバーブ・ディレイ<small>ひらく →</small></a></nav>
+
   <div class="intro">
     <h1>EQで、声はどう変わる？<br>聞き比べて体験しよう</h1>
     <p>声を録音するか、音声ファイルを選んで、5つの帯域をフェーダーで動かしてみてください。<br>EQの「あり／なし」を、ワンタップで聞き比べられます。</p>
@@ -160,6 +170,8 @@ footer a{color:var(--blue);text-decoration:underline;font-weight:700}
     <p>実際のMIXでは、EQのほかに、音量や響きのバランス調整、音程・リズムの補正なども行います。あなたの歌ってみたを、聴きやすく仕上げます。</p>
     <div class="btns">
       <a class="btn amber" id="ctaForm" href="#" target="_blank" rel="noopener" data-link="cta_form">MIXを依頼する(フォームへ)</a>
+      <a class="btn line" href="../comp/" data-link="cta_comp">コンプ体験もやってみる</a>
+      <a class="btn line" href="../space/" data-link="cta_space">リバーブ・ディレイ体験もやってみる</a>
       <a class="btn line" href="../" data-link="cta_lp">料金・流れを見る</a>
     </div>
   </section>
