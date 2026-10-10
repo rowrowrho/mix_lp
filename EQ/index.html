@@ -348,6 +348,12 @@ player.addEventListener('play', () => ensureCtx());
 
 // ===== 録音 =====
 let rec=null, recStream=null, recChunks=[], recTimer=null, recT0=0;
+// マイクモード: 録音している間だけ「録音+再生」(マイクを使う状態)にして、終わったらマイクを手放し「再生のみ」に戻す
+function micMode(on){ try{ if (navigator.audioSession) navigator.audioSession.type = on ? 'play-and-record' : 'playback'; }catch(e){} }
+function releaseMic(){ try{ if (recStream) recStream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){} recStream = null; micMode(false); }
+micMode(false);
+document.addEventListener('visibilitychange', function(){ if (document.hidden && rec && rec.state==='recording') stopRec(); });
+window.addEventListener('pagehide', releaseMic);
 const canRec = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
 if (!canRec) { $('btnRec').hidden = true; $('btnFile').parentElement.style.gridTemplateColumns='1fr'; $('srcNote').textContent='このブラウザでは録音が使えないため、音声ファイルを選んでください。'; }
 const fmt = s => Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
@@ -366,11 +372,12 @@ function encodeWav(buf){
   return new Blob([out], {type:'audio/wav'});
 }
 async function startRec(){
+  micMode(true);
   ensureCtx(); player.pause(); $('recMsg').hidden = true;
   try {
     recStream = await navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:false, noiseSuppression:false, autoGainControl:false } });
   } catch (e) {
-    $('recMsg').hidden = false; $('recMsg').textContent = 'マイクが使えませんでした。ブラウザのマイクの許可を確認するか、「ファイルを選ぶ」をお使いください。'; return;
+    micMode(false); $('recMsg').hidden = false; $('recMsg').textContent = 'マイクが使えませんでした。ブラウザのマイクの許可を確認するか、「ファイルを選ぶ」をお使いください。'; return;
   }
   const types = ['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus'];
   const mt = types.find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t));
@@ -378,7 +385,7 @@ async function startRec(){
   recChunks = [];
   rec.ondataavailable = e => { if (e.data && e.data.size) recChunks.push(e.data); };
   rec.onstop = async () => {
-    clearInterval(recTimer); recStream.getTracks().forEach(t => t.stop()); setRecUi(false);
+    clearInterval(recTimer); releaseMic(); setRecUi(false);
     const blob = new Blob(recChunks, {type: rec.mimeType || 'audio/webm'});
     const dur = (Date.now()-recT0)/1000;
     let outBlob = blob;
