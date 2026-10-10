@@ -495,19 +495,26 @@ $('fileInput').addEventListener('change', async e => {
   catch (err){ $('recMsg').hidden=false; $('recMsg').textContent='この音声ファイルは読み込めませんでした。別の形式(WAV・MP3・M4Aなど)でお試しください。'; }
 });
 let rec=null, recStream=null, recChunks=[], recTimer=null, recT0=0;
+// マイクモード: 録音している間だけ「録音+再生」(マイクを使う状態)にして、終わったらマイクを手放し「再生のみ」に戻す
+function micMode(on){ try{ if (navigator.audioSession) navigator.audioSession.type = on ? 'play-and-record' : 'playback'; }catch(e){} }
+function releaseMic(){ try{ if (recStream) recStream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){} recStream = null; micMode(false); }
+micMode(false);
+document.addEventListener('visibilitychange', function(){ if (document.hidden && rec && rec.state==='recording') stopRec(); });
+window.addEventListener('pagehide', releaseMic);
 const canRec = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
 if (!canRec){ $('btnRec').hidden = true; $('btnFile').parentElement.style.gridTemplateColumns='1fr'; $('script').hidden = true; }
 function setRecUi(on){ $('btnRec').classList.toggle('on', on); $('recLabel').textContent = on ? '■ 録音を止める' : '🎤 声を録音する'; $('recSub').textContent = on ? '録音中… 0:00' : 'スマホのマイクでOK'; }
 async function startRec(){
+  micMode(true);
   ensureCtx(); stopPlayback(); $('recMsg').hidden = true;
   try { recStream = await navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:false, noiseSuppression:false, autoGainControl:false } }); }
-  catch (e){ $('recMsg').hidden=false; $('recMsg').textContent='マイクが使えませんでした。ブラウザのマイクの許可を確認するか、「ファイルを選ぶ」をお使いください。'; return; }
+  catch (e){ micMode(false); $('recMsg').hidden=false; $('recMsg').textContent='マイクが使えませんでした。ブラウザのマイクの許可を確認するか、「ファイルを選ぶ」をお使いください。'; return; }
   const types = ['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus'];
   const mt = types.find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t));
   rec = mt ? new MediaRecorder(recStream, {mimeType:mt}) : new MediaRecorder(recStream); recChunks = [];
   rec.ondataavailable = e => { if (e.data && e.data.size) recChunks.push(e.data); };
   rec.onstop = async () => {
-    clearInterval(recTimer); recStream.getTracks().forEach(t=>t.stop()); setRecUi(false);
+    clearInterval(recTimer); releaseMic(); setRecUi(false);
     const blob = new Blob(recChunks, {type: rec.mimeType || 'audio/webm'}), sec = (Date.now()-recT0)/1000;
     try { const buf = await ctx.decodeAudioData(await blob.arrayBuffer()); loadBuffer(buf, '録音した音声('+fmt(sec)+')'); track('mix_comp_record_done',{sec:Math.round(sec)}); }
     catch (e){ $('recMsg').hidden=false; $('recMsg').textContent='録音を読み込めませんでした。もう一度お試しください。'; }
