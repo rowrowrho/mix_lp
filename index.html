@@ -16,7 +16,6 @@
 <meta property="og:title" content="歌ってみたMIX依頼｜1曲¥6,000 - RHO MIX">
 <meta property="og:description" content="ボーカルMIX・ボーカルエディットを1曲¥6,000で。無料の録音チェッカー付き。">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://rowrowrho.github.io/voice-training-lp/images/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -203,7 +202,7 @@
       <div class="p-num">¥6,000<small>／1曲（税込）</small></div>
       <div class="p-note">ボーカルのMIX・ボーカルエディット<br>（音程・リズム補正など）</div>
     </div>
-    <a class="btn js-form" data-pos="hero" href="#">MIXを依頼する（フォームへ）</a>
+    <a class="btn js-form" data-pos="hero" href="#">MIXを依頼する</a>
     <span class="btn-sub">録音が不安な方は、先に<a href="#checker" style="text-decoration:underline">無料の録音チェック</a>へ</span>
   </div>
 </div>
@@ -388,7 +387,7 @@
     <div class="wrap">
       <h2>あなたの歌声、<br>MIXで仕上げませんか？</h2>
       <p>1曲 ¥6,000（税込）（ボーカルのMIX・ボーカルエディット）／修正回数は上限なし</p>
-      <a class="btn js-form" data-pos="final" href="#">MIXを依頼する（フォームへ）</a>
+      <a class="btn js-form" data-pos="final" href="#">MIXを依頼する</a>
       <span class="btn-sub">先に録音を確かめたい方は <a class="js-checker" data-pos="final" href="https://rowrowrho.github.io/voice-training-lp/recording_checker/" style="text-decoration:underline">録音チェッカー（無料）</a></span>
     </div>
   </div>
@@ -428,11 +427,12 @@
 <script>
 (() => {
   'use strict';
-  const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScDBnkhKNUxxVmrZOpWXMTe_Q-75dTuoWCIFhULGhQDI18SsQ/viewform?usp=header';
+  // 依頼ページ(request/)へ。流入元のutmがあれば引き継ぎ、なければLPからの導線として記録する
+  const REQUEST_URL = 'request/' + (/[?&]utm_/.test(location.search) ? location.search : '?utm_source=mix_lp&utm_medium=cta');
   const track = (name, params) => { try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch (e) {} };
 
   document.querySelectorAll('.js-form').forEach((a) => {
-    a.href = FORM_URL; a.target = '_blank'; a.rel = 'noopener';
+    a.href = REQUEST_URL;
     a.addEventListener('click', () => track('mix_form_click', { position: a.dataset.pos }));
   });
   document.querySelectorAll('.js-eq').forEach((a) => {
