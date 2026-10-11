@@ -235,14 +235,10 @@
 (() => {
   'use strict';
   /* ===== 設定 =====
-     送信先: 既存のGoogleフォームに、この画面から裏で送ります。
-       GF.action  : フォームの送信先URL(…/formResponse で終わるもの)
-       GF.entries : このページの項目 → Googleフォームの entry.数字
-     GF.action が空のあいだは「内容をコピーして、フォームに貼る」画面になります。 */
-  const GF = {
-    action: '',
-    entries: { /* 例) name:'entry.1111111111', contact:'entry.2222222222', … 、まとめ項目は 'summary' */ }
-  };
+     送信先: 回答をまとめるスプレッドシート用のウェブアプリURL（Apps Scriptで公開したもの）。
+     ENDPOINT が空のあいだは「内容をコピーして、フォームに貼る」画面になります。 */
+  const ENDPOINT = '';
+  const FORM_ID = 'mix';
   const OLD_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScDBnkhKNUxxVmrZOpWXMTe_Q-75dTuoWCIFhULGhQDI18SsQ/viewform?usp=header';
   const REPLY_TEXT = '内容を確認して、こちらからご連絡します。';
 
@@ -356,14 +352,14 @@
     const d = collect();
     track('mix_request_submit', { kind: d.kind, rush: d.rush && d.rush !== '希望しない' ? 'yes' : 'no' });
 
-    if (!GF.action) { showDone(summary(d)); return; }
+    if (!ENDPOINT) { showDone(summary(d)); return; }
 
     const btn = $('#go'); btn.disabled = true; btn.textContent = '送信しています…';
-    const fd = new FormData();
-    const E = GF.entries, text = summary(d);
-    Object.keys(E).forEach((k) => { fd.append(E[k], k === 'summary' ? text : (d[k] || '')); });
+    const fd = new URLSearchParams();
+    Object.keys(d).forEach((k) => fd.append(k, d[k] || ''));
+    fd.append('summary', summary(d)); fd.append('form', FORM_ID);
     try {
-      await fetch(GF.action, { method: 'POST', mode: 'no-cors', body: fd });
+      await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: fd });
       showDone('');
     } catch (e) {
       btn.disabled = false; btn.textContent = 'この内容で依頼する';
