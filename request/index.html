@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIXのご依頼｜RHO MIX</title>
+<meta name="description" content="歌ってみたのMIXのご依頼フォームです。1分ほどで入力できます。">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<!-- Google tag (GA4): MIX LPと同じ計測ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ME8HE69PX8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ME8HE69PX8');
+</script>
+<style>
+  :root{
+    --navy:#173A5E; --navy-2:#0F2A46; --blue:#2E76B6; --sky:#EAF2FB; --bg:#F5F8FC; --paper:#FFFFFF;
+    --text:#2B3A4A; --text-dim:#66788C; --line:#D5DFEA;
+    --amber:#F5B84E; --amber-bg:#FDF3E1; --amber-ink:#8A5A00;
+    --data:#17A98D; --data-2:#0E7F69; --data-bg:#E7F7F3;
+    --bad:#E0685C; --bad-ink:#B23F33; --bad-bg:#FBEAE8;
+    --sans:"Zen Kaku Gothic New", sans-serif; --shadow:0 16px 40px rgba(23,58,94,0.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.8; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; padding-bottom:40px;}
+  a{color:inherit; text-decoration:none;}
+  [hidden]{display:none !important;}
+  .wrap{max-width:640px; margin:0 auto; padding:0 16px;}
+  header.nav{background:var(--paper); border-bottom:1px solid var(--line);}
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 16px; max-width:640px; margin:0 auto;}
+  .brand{font-weight:900; color:var(--navy); font-size:15px;}
+  .back{font-size:13px; font-weight:700; color:var(--blue);}
+  .hero{background:linear-gradient(160deg,var(--navy),var(--navy-2)); color:#fff; padding:30px 0 28px;}
+  .hero h1{font-size:26px; font-weight:900; line-height:1.4;}
+  .hero p{margin-top:6px; font-size:14px; color:#D6E2EE;}
+  .hero .time{display:inline-block; margin-top:12px; font-size:12px; font-weight:700; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); border-radius:99px; padding:2px 12px;}
+
+  form{display:flex; flex-direction:column; gap:16px; padding-block:20px;}
+  fieldset{border:1px solid var(--line); border-radius:16px; background:var(--paper); padding:16px 16px 18px; display:flex; flex-direction:column; gap:16px; min-width:0;}
+  legend{font-size:13px; font-weight:900; color:var(--blue); letter-spacing:.08em; padding:0 8px;}
+  .q{display:flex; flex-direction:column; gap:6px; min-width:0;}
+  .q > label, .q > .lb{font-size:15px; font-weight:700; color:var(--navy);}
+  .req{font-size:11px; font-weight:900; color:#fff; background:var(--navy); border-radius:99px; padding:0 8px; margin-left:6px; vertical-align:middle;}
+  .opt{font-size:11px; font-weight:700; color:var(--text-dim); background:var(--sky); border-radius:99px; padding:0 8px; margin-left:6px; vertical-align:middle;}
+  .hint{font-size:12.5px; color:var(--text-dim);}
+  input[type="text"],input[type="date"],select,textarea{width:100%; font-family:inherit; font-size:16px; color:var(--text); background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:11px 12px; min-height:48px;}
+  textarea{min-height:96px; resize:vertical;}
+  input:focus-visible,select:focus-visible,textarea:focus-visible,.opt-card:has(input:focus-visible),button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--blue); outline-offset:2px;}
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt-card{display:flex; align-items:flex-start; gap:10px; border:1.5px solid var(--line); border-radius:12px; padding:11px 12px; background:#fff; cursor:pointer; min-height:48px; font-size:15px;}
+  .opt-card input{width:22px; height:22px; margin-top:2px; flex:none; accent-color:var(--navy);}
+  .opt-card:has(input:checked){border-color:var(--navy); background:var(--sky);}
+  .opt-card small{display:block; font-size:12.5px; color:var(--text-dim);}
+  .notice{border-radius:12px; padding:12px 14px; font-size:14px; line-height:1.7;}
+  .notice.bad{background:var(--bad-bg); color:var(--bad-ink); border:1.5px solid var(--bad);}
+  .notice.info{background:var(--amber-bg); color:var(--amber-ink); border:1.5px solid var(--amber);}
+  .notice b{font-weight:900;}
+  .err{font-size:13px; font-weight:700; color:var(--bad-ink); display:none;}
+  .q.invalid .err{display:block;}
+  .q.invalid input[type="text"],.q.invalid select,.q.invalid textarea{border-color:var(--bad);}
+  .estimate{background:var(--paper); border:2px solid var(--navy); border-radius:16px; padding:14px 16px; display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .estimate .k{font-size:13px; font-weight:700; color:var(--text-dim);}
+  .estimate .v{font-size:30px; font-weight:900; color:var(--navy); font-variant-numeric:tabular-nums;}
+  .estimate .v small{font-size:13px; font-weight:700; margin-left:3px;}
+  .estimate .d{flex-basis:100%; font-size:12.5px; color:var(--text-dim);}
+  details.terms{border:1px solid var(--line); border-radius:12px; background:var(--bg);}
+  details.terms summary{cursor:pointer; padding:12px 14px; font-weight:700; font-size:14px; color:var(--navy); min-height:48px; display:flex; align-items:center;}
+  details.terms .tb{padding:0 14px 14px; font-size:13.5px;}
+  details.terms ul{margin:0; padding-left:1.2em; display:flex; flex-direction:column; gap:3px;}
+  .submit{width:100%; border:0; border-radius:14px; background:var(--amber); color:var(--navy-2); font-family:inherit; font-weight:900; font-size:17px; padding:16px 20px; min-height:56px; cursor:pointer; box-shadow:0 8px 20px rgba(245,184,78,.35);}
+  .submit:disabled{opacity:.55; cursor:default; box-shadow:none;}
+  .done{background:var(--data-bg); border:2px solid var(--data); border-radius:16px; padding:20px 18px; margin-block:20px; color:var(--data-2);}
+  .done h2{font-size:20px; font-weight:900; color:var(--data-2);}
+  .done p{margin-top:8px; font-size:14.5px; color:var(--text);}
+  .done .btn2{display:inline-flex; align-items:center; margin-top:12px; min-height:48px; padding:8px 18px; border-radius:12px; border:1.5px solid var(--navy); color:var(--navy); font-weight:900; background:#fff; font-family:inherit; font-size:15px; cursor:pointer;}
+  .copybox{margin-top:12px; width:100%; min-height:160px; font-size:14px;}
+  .hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;}
+  footer{text-align:center; font-size:12px; color:var(--text-dim); padding-block:10px 24px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none !important; scroll-behavior:auto !important;}}
+</style>
+</head>
+<body>
+
+<header class="nav"><div class="nav-inner">
+  <a class="brand" href="../">RHO MIX</a>
+  <a class="back" href="../" data-track="req_back">← LPにもどる</a>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <h1>MIXのご依頼</h1>
+  <p>歌ってみたのボーカルMIX・ボーカルエディット（音程・リズム補正など）をお受けします。</p>
+  <span class="time">入力は1分ほど</span>
+</div></div>
+
+<main class="wrap">
+<form id="f" novalidate autocomplete="off">
+
+  <fieldset>
+    <legend>ご依頼の内容</legend>
+
+    <div class="q" id="q-kind" data-req>
+      <div class="lb" id="lb-kind">依頼の種類<span class="req">必須</span></div>
+      <div class="opts" role="radiogroup" aria-labelledby="lb-kind">
+        <label class="opt-card"><input type="radio" name="kind" value="MIXのみ"><span>MIXのみ<small>¥6,000／1曲（税込）</small></span></label>
+        <label class="opt-card"><input type="radio" name="kind" value="ワンコーラスMIX"><span>ワンコーラスMIX<small>¥3,000／1曲（税込）</small></span></label>
+        <label class="opt-card"><input type="radio" name="kind" value="MIX＋MV"><span>MIX＋MV<small>¥6,000＋¥8,000（セット割引はありません）</small></span></label>
+        <label class="opt-card"><input type="radio" name="kind" value="MVのみ"><span>MVのみ<small>¥8,000（税込）</small></span></label>
+      </div>
+      <div class="err">依頼の種類を選んでください</div>
+    </div>
+
+    <div class="q" id="q-song" data-req>
+      <label for="song">原曲のリンク<span class="req">必須</span></label>
+      <input type="text" id="song" name="song" maxlength="300" inputmode="url" placeholder="https://...">
+      <div class="hint">YouTubeなど、原曲が聴けるページのURLを貼ってください。</div>
+      <div class="err">原曲のURL（https://…）を入力してください</div>
+    </div>
+
+    <div class="q" id="q-date">
+      <label for="date">納品してほしい日<span class="opt">任意</span></label>
+      <input type="date" id="date" name="date">
+      <label class="opt-card" style="min-height:44px"><input type="checkbox" id="dateTbd" name="dateTbd"><span>日にちの指定はありません</span></label>
+      <div class="hint">MIXは1週間以内の納品を目標にしています。余裕をもってご依頼ください。</div>
+    </div>
+
+    <div class="q" id="q-rush" hidden>
+      <div class="lb" id="lb-rush">3日以内の急ぎ納品を希望しますか？（フルのMIXのみ）<span class="opt">任意</span></div>
+      <div class="opts" role="radiogroup" aria-labelledby="lb-rush">
+        <label class="opt-card"><input type="radio" name="rush" value="希望しない" checked><span>希望しない</span></label>
+        <label class="opt-card"><input type="radio" name="rush" value="希望する（＋¥3,000）"><span>希望する<small>＋¥3,000。依頼後のキャンセルはお受けできません</small></span></label>
+      </div>
+    </div>
+    <div class="notice info">
+      ボーカルとインスト（オケ）のデータは、ご連絡のあとにお送りください（Googleドライブなどのリンクで大丈夫です）。<br>
+      送る前に、無料の<a href="https://rowrowrho.github.io/voice-training-lp/recording_checker/" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:900" data-track="req_checker">録音チェッカー</a>で音割れ・ノイズを確認すると安心です。<br>
+      <b>オケの制作や、耳コピでのカラオケ音源づくりはお受けしていません。</b>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>音源と仕上がり</legend>
+    <div class="q">
+      <label for="ref">参考にする作品のURL<span class="opt">任意</span></label>
+      <input type="text" id="ref" name="ref" maxlength="300" inputmode="url" placeholder="https://...">
+      <div class="hint">「こんな仕上がりにしたい」という作品があれば、リンクを貼ってください。</div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>ご連絡先</legend>
+    <div class="q" id="q-name" data-req>
+      <label for="name">活動名<span class="req">必須</span></label>
+      <input type="text" id="name" name="name" maxlength="60" placeholder="例）〇〇" autocomplete="nickname">
+      <div class="hint">本名は不要です。</div>
+      <div class="err">活動名を入力してください</div>
+    </div>
+    <div class="q" id="q-contact" data-req>
+      <label for="contact">連絡先（XのIDかメールアドレス）<span class="req">必須</span></label>
+      <input type="text" id="contact" name="contact" maxlength="120" placeholder="例）@xxxxx / xxxx@example.com" autocomplete="off">
+      <div class="err">連絡先を入力してください</div>
+    </div>
+    <div class="q">
+      <div class="lb" id="lb-credit">MIXした作品として、紹介してもよいですか？<span class="opt">任意</span></div>
+      <div class="opts" role="radiogroup" aria-labelledby="lb-credit">
+        <label class="opt-card"><input type="radio" name="credit" value="はい"><span>はい</span></label>
+        <label class="opt-card"><input type="radio" name="credit" value="いいえ"><span>いいえ</span></label>
+        <label class="opt-card"><input type="radio" name="credit" value="相談したい"><span>納品後に相談したい</span></label>
+      </div>
+      <div class="hint">紹介する場合は、公開された動画へのリンクを載せます。</div>
+    </div>
+    <div class="q">
+      <label for="how">このページを知った場所<span class="opt">任意</span></label>
+      <select id="how" name="how">
+        <option value="">選んでください</option>
+        <option>X</option>
+        <option>YouTube</option>
+        <option>note</option>
+        <option>知り合いの紹介</option>
+        <option>その他</option>
+      </select>
+    </div>
+    <div class="q">
+      <label for="memo">そのほか、伝えたいこと<span class="opt">任意</span></label>
+      <textarea id="memo" name="memo" maxlength="800"></textarea>
+    </div>
+  </fieldset>
+
+  <div class="estimate" aria-live="polite">
+    <span class="k">料金の目安（税込）</span>
+    <span class="v num" id="est">—</span>
+    <span class="d" id="estNote">依頼の種類を選ぶと表示されます。</span>
+  </div>
+
+  <details class="terms">
+    <summary>料金・支払い・キャンセルの条件</summary>
+    <div class="tb"><ul>
+      <li>MIX（ボーカルMIX・ボーカルエディット）：¥6,000／1曲</li>
+      <li>ワンコーラスMIX：¥3,000／1曲</li>
+      <li>急ぎ対応（3日以内・フルのMIXのみ）：＋¥3,000</li>
+      <li>MV制作：¥8,000（1週間ほど余裕をもってご依頼ください）</li>
+      <li>支払いは納品後。PayPay、または銀行振込（振込手数料はご依頼者様のご負担）</li>
+      <li>キャンセル：依頼から3日以内は無料、それ以降は依頼料の50%、納品後は100%</li>
+      <li>急ぎ対応は、依頼後のキャンセルをお受けできません（依頼料の100%）</li>
+      <li>修正は回数の上限なく対応します</li>
+    </ul></div>
+  </details>
+  <p class="hint" style="text-align:center">送信すると、上の条件（キャンセル・支払いなど）に同意したものとします。</p>
+
+  <div class="hp" aria-hidden="true"><label>空欄のままにしてください<input type="text" id="hp" tabindex="-1" autocomplete="off"></label></div>
+
+  <button type="submit" class="submit" id="go">この内容で依頼する</button>
+  <div class="notice bad" id="sendErr" hidden role="alert"></div>
+</form>
+
+<section class="done" id="done" hidden aria-live="polite" tabindex="-1">
+  <h2 id="doneH">送信しました</h2>
+  <p id="doneP"></p>
+  <div id="fallback" hidden>
+    <textarea class="copybox" id="copybox" readonly></textarea>
+    <button type="button" class="btn2" id="copyBtn">内容をコピー</button>
+    <a class="btn2" id="openForm" target="_blank" rel="noopener" style="margin-left:6px">フォームを開く</a>
+  </div>
+  <a class="btn2" href="../" data-track="req_done_back" style="margin-top:14px">LPにもどる</a>
+</section>
+</main>
+
+<footer>© RHO MIX</footer>
+
+<script>
+(() => {
+  'use strict';
+  /* ===== 設定 =====
+     送信先: 既存のGoogleフォームに、この画面から裏で送ります。
+       GF.action  : フォームの送信先URL(…/formResponse で終わるもの)
+       GF.entries : このページの項目 → Googleフォームの entry.数字
+     GF.action が空のあいだは「内容をコピーして、フォームに貼る」画面になります。 */
+  const GF = {
+    action: '',
+    entries: { /* 例) name:'entry.1111111111', contact:'entry.2222222222', … 、まとめ項目は 'summary' */ }
+  };
+  const OLD_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScDBnkhKNUxxVmrZOpWXMTe_Q-75dTuoWCIFhULGhQDI18SsQ/viewform?usp=header';
+  const REPLY_TEXT = '内容を確認して、こちらからご連絡します。';
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const track = (name, p) => { try { if (typeof gtag === 'function') gtag('event', name, p || {}); } catch (e) {} };
+  const val = (name) => { const x = $(`[name="${name}"]:checked`); return x ? x.value : ''; };
+  const vals = (name) => $$(`[name="${name}"]:checked`).map((x) => x.value);
+
+  $$('a[data-track]').forEach((a) => a.addEventListener('click', () => track(a.dataset.track)));
+
+  // 入力が始まったら1回だけ数える
+  let started = false;
+  $('#f').addEventListener('input', () => { if (!started) { started = true; track('mix_request_start'); } }, { once: false });
+
+  // ---- 料金の目安 ----
+  const PRICE = { 'MIXのみ': 6000, 'ワンコーラスMIX': 3000, 'MIX＋MV': 14000, 'MVのみ': 8000 };
+  function update() {
+    const kind = val('kind');
+    // 急ぎはMIXのみ
+    $('#q-rush').hidden = kind !== 'MIXのみ';
+    if (kind !== 'MIXのみ') { const r = $('[name="rush"][value="希望しない"]'); if (r) r.checked = true; }
+    // 見積
+    const rush = val('rush').startsWith('希望する');
+    if (!kind) { $('#est').innerHTML = '—'; $('#estNote').textContent = '依頼の種類を選ぶと表示されます。'; return; }
+    const total = PRICE[kind] + (rush ? 3000 : 0);
+    $('#est').innerHTML = '¥' + total.toLocaleString('ja-JP') + '<small>（税込）</small>';
+    $('#estNote').textContent = kind === 'MIX＋MV' ? 'MIX ¥6,000 ＋ MV ¥8,000。セット割引はありません。'
+      : rush ? 'MIX ¥6,000 ＋ 急ぎ ¥3,000。' : kind === 'ワンコーラスMIX' ? 'ワンコーラス分のMIXです。' : '1曲あたりの料金です。';
+  }
+  $('#f').addEventListener('change', update);
+  $('#dateTbd').addEventListener('change', (e) => { if (e.target.checked) $('#date').value = ''; });
+  $('#date').addEventListener('input', () => { if ($('#date').value) $('#dateTbd').checked = false; });
+  update();
+  (() => { const t = new Date(); t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); $('#date').min = t.toISOString().slice(0, 10); })();
+
+  // ---- 流入元(URLのutm、なければリンク元)。画面には出さず、送信に添えます ----
+  function source() {
+    const q = new URLSearchParams(location.search);
+    const parts = ['utm_source', 'utm_medium', 'utm_campaign'].map((k) => q.get(k)).filter(Boolean);
+    if (parts.length) return parts.join(' / ');
+    try { if (document.referrer) return new URL(document.referrer).hostname; } catch (e) {}
+    return '';
+  }
+
+  // ---- 入力チェック ----
+  function validate() {
+    let first = null;
+    $$('.q[data-req]').forEach((q) => {
+      let ok = true;
+      const radios = $$('input[type="radio"]', q), box = $('input[type="checkbox"]', q), text = $('input[type="text"]', q);
+      if (radios.length) ok = radios.some((r) => r.checked);
+      else if (box) ok = box.checked;
+      else if (text) ok = q.id === 'q-song' ? /^https?:\/\/\S+/i.test(text.value.trim()) : text.value.trim() !== '';
+      q.classList.toggle('invalid', !ok);
+      if (!ok && !first) first = q;
+    });
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return !first;
+  }
+  $('#f').addEventListener('input', (e) => { const q = e.target.closest('.q'); if (q) q.classList.remove('invalid'); });
+  $('#f').addEventListener('change', (e) => { const q = e.target.closest('.q'); if (q) q.classList.remove('invalid'); });
+
+  // ---- 送る内容 ----
+  function collect() {
+    const date = $('#dateTbd').checked ? '指定なし' : $('#date').value;
+    return {
+      kind: val('kind'), song: $('#song').value.trim(),
+      date, rush: val('rush'), ref: $('#ref').value.trim(),
+      name: $('#name').value.trim(), contact: $('#contact').value.trim(),
+      credit: val('credit'), how: $('#how').value, memo: $('#memo').value.trim(), source: source()
+    };
+  }
+  function summary(d) {
+    const L = [];
+    const add = (k, v) => { if (v) L.push('【' + k + '】' + v); };
+    add('依頼の種類', d.kind); add('原曲のリンク', d.song);
+    add('納品希望日', d.date); add('急ぎ納品', d.rush && d.rush !== '希望しない' ? d.rush : '');
+    add('参考にする作品', d.ref); add('活動名', d.name); add('連絡先', d.contact);
+    add('MIXした作品としての紹介', d.credit); add('知った場所', d.how); add('そのほか', d.memo);
+    add('流入元', d.source);
+    return L.join('\n');
+  }
+
+  function showDone(fallbackText) {
+    $('#f').hidden = true;
+    const done = $('#done'); done.hidden = false;
+    if (fallbackText) {
+      $('#doneH').textContent = '依頼内容をまとめました';
+      $('#doneP').textContent = '内容をコピーして、フォームの「そのほか」の欄に貼って送信してください。';
+      $('#copybox').value = fallbackText; $('#openForm').href = OLD_FORM_URL; $('#fallback').hidden = false;
+    } else {
+      $('#doneH').textContent = '送信しました';
+      $('#doneP').textContent = REPLY_TEXT;
+    }
+    done.focus(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  $('#copyBtn').addEventListener('click', async () => {
+    const box = $('#copybox'); box.select();
+    try { await navigator.clipboard.writeText(box.value); $('#copyBtn').textContent = 'コピーしました'; }
+    catch (e) { document.execCommand && document.execCommand('copy'); $('#copyBtn').textContent = 'コピーしました'; }
+  });
+
+  $('#f').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    $('#sendErr').hidden = true;
+    if ($('#hp').value) return;                    // 自動入力ボットは何も起きないように終わる
+    if (!validate()) return;
+
+    const d = collect();
+    track('mix_request_submit', { kind: d.kind, rush: d.rush && d.rush !== '希望しない' ? 'yes' : 'no' });
+
+    if (!GF.action) { showDone(summary(d)); return; }
+
+    const btn = $('#go'); btn.disabled = true; btn.textContent = '送信しています…';
+    const fd = new FormData();
+    const E = GF.entries, text = summary(d);
+    Object.keys(E).forEach((k) => { fd.append(E[k], k === 'summary' ? text : (d[k] || '')); });
+    try {
+      await fetch(GF.action, { method: 'POST', mode: 'no-cors', body: fd });
+      showDone('');
+    } catch (e) {
+      btn.disabled = false; btn.textContent = 'この内容で依頼する';
+      const err = $('#sendErr');
+      err.hidden = false;
+      err.textContent = '送信できませんでした。通信を確かめて、もう一度押してください。うまくいかないときは、X（@row_row_rho）のメッセージで連絡してください。';
+      track('mix_request_error');
+    }
+  });
+})();
+</script>
+</body>
+</html>
