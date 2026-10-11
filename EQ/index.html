@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>声のEQ体験｜RHO MIX</title>
-<meta name="description" content="声を録音（または音声ファイルを選択）して、5つの帯域をフェーダーで上げ下げ。EQのあり／なしを聞き比べて、声がどう変わるかを体験できる無料ツールです。">
+<meta name="description" content="声を録音（または音声ファイルを選択）して、6つの帯域をフェーダーで上げ下げ。EQのあり／なしを聞き比べて、声がどう変わるかを体験できる無料ツールです。">
 <meta property="og:title" content="声のEQ体験｜RHO MIX">
 <meta property="og:description" content="スマホで録音して、フェーダーを動かすだけ。EQで声がどう変わるかを体験。無料・登録不要。">
 <meta property="og:type" content="website">
@@ -70,16 +70,16 @@ canvas{display:block;width:100%;height:100%}
 
 /* ===== ミキサー風フェーダー ===== */
 .mixer{margin-top:12px;background:#1E2A38;border-radius:14px;padding:14px 8px 12px;display:flex;gap:4px;justify-content:center;user-select:none;-webkit-user-select:none}
-.scale{width:30px;display:flex;flex-direction:column;align-items:flex-end}
+.scale{width:30px;flex:none;display:flex;flex-direction:column;align-items:flex-end}
 .scale .sp{height:34px}
 .scale .sc{position:relative;height:200px;width:100%}
 .scale .sc span{position:absolute;right:2px;transform:translateY(-50%);font-size:10px;color:#9FB0C3;font-variant-numeric:tabular-nums}
 .scale .sc span.z{color:var(--amber);font-weight:700}
-.strip{flex:1;max-width:64px;display:flex;flex-direction:column;align-items:center;border-radius:10px;padding:4px 0 6px;border:1.5px solid transparent;cursor:pointer}
+.strip{flex:1;min-width:0;max-width:64px;display:flex;flex-direction:column;align-items:center;border-radius:10px;padding:4px 0 6px;border:1.5px solid transparent;cursor:pointer}
 .strip.sel{border-color:rgba(245,184,78,.7);background:rgba(255,255,255,.05)}
 .strip .v{height:30px;font-size:12.5px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;display:flex;align-items:center}
 .strip .v.up{color:#6BE3C6} .strip .v.down{color:#FF9D93}
-.fader{position:relative;width:44px;height:200px;touch-action:none;outline:none}
+.fader{position:relative;width:100%;max-width:44px;height:200px;touch-action:none;outline:none}
 .fader .groove{position:absolute;left:50%;top:12px;bottom:12px;width:6px;margin-left:-3px;background:#0B121A;border-radius:3px;box-shadow:inset 0 0 0 1px #3A4756}
 .fader .tick{position:absolute;left:6px;right:6px;height:1px;background:rgba(255,255,255,.14)}
 .fader .tick.z{background:var(--amber);height:2px;opacity:.9}
@@ -88,6 +88,7 @@ canvas{display:block;width:100%;height:100%}
 .fader:focus-visible .cap{outline:2px solid var(--amber)}
 .strip .nm{margin-top:6px;font-size:11.5px;font-weight:700;color:#E8EEF5;text-align:center;line-height:1.35}
 .strip .nm small{display:block;font-size:10px;font-weight:400;color:#9FB0C3}
+@media(max-width:360px){.mixer{gap:2px;padding-left:4px;padding-right:4px}.strip .v{font-size:10.5px;white-space:nowrap}.strip .nm{font-size:10px;white-space:nowrap}.strip .nm small{font-size:8.5px}}
 .banddesc{margin-top:10px;background:var(--sky);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.7}
 .banddesc b{color:var(--navy)}
 .cta{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;border-radius:20px;padding:26px 18px;margin-top:20px;text-align:center}
@@ -123,7 +124,7 @@ footer a{color:var(--blue);text-decoration:underline;font-weight:700}
 
   <div class="intro">
     <h1>EQで、声はどう変わる？<br>聞き比べて体験しよう</h1>
-    <p>声を録音するか、音声ファイルを選んで、5つの帯域をフェーダーで動かしてみてください。<br>EQの「あり／なし」を、ワンタップで聞き比べられます。</p>
+    <p>声を録音するか、音声ファイルを選んで、6つの帯域をフェーダーで動かしてみてください。<br>EQの「あり／なし」を、ワンタップで聞き比べられます。</p>
     <span class="tip">🎧 イヤホン・ヘッドホン推奨 / 音量は小さめから</span>
   </div>
 
@@ -193,27 +194,28 @@ const $ = id => document.getElementById(id);
 const BANDS = [
   { name:'低音',   sub:'100Hz〜',  full:'低音の太さ(100Hz付近〜)', hz:100,  type:'lowshelf',  q:0.7, up:'太く、あたたかくなる(上げすぎるとボワつく)', down:'すっきり、軽くなる' },
   { name:'こもり', sub:'300Hz',    full:'こもり(300Hz付近)',       hz:300,  type:'peaking',   q:1.0, up:'こもる、箱に入ったような音になる',               down:'こもりが取れて、抜けがよくなる' },
+  { name:'距離感', sub:'1kHz',     full:'距離感(1kHz付近)',        hz:1000, type:'peaking',   q:1.0, up:'声が近くに聞こえる(上げすぎると鼻にかかった音になる)', down:'声が遠くに聞こえる' },
   { name:'存在感', sub:'3kHz',     full:'存在感(3kHz付近)',        hz:3000, type:'peaking',   q:1.0, up:'言葉がはっきりして前に出る(上げすぎるとキツい)', down:'奥に引っ込む、やさしい印象になる' },
   { name:'刺さり', sub:'6kHz',     full:'刺さり(6kHz付近)',        hz:6000, type:'peaking',   q:1.2, up:'サ行が強くなり、キンキンしやすい',               down:'まろやかになる(下げすぎると言葉がぼやける)' },
   { name:'空気感', sub:'10kHz〜',  full:'空気感(10kHz付近〜)',     hz:10000,type:'highshelf', q:0.7, up:'きらびやかで、息づかいが見える',                 down:'落ち着いた、暗めの音になる' }
 ];
-// 並び順: [低音, こもり, 存在感, 刺さり, 空気感]
+// 並び順: [低音, こもり, 距離感, 存在感, 刺さり, 空気感]
 const PRESET_GROUPS = [
   { label:'悩みを直す', items:[
-    { name:'こもりを取る',           g:[0,-4,0,0,0],   t:'300Hz付近を下げると、こもった声が抜けやすくなります。' },
-    { name:'言葉をはっきりさせる',   g:[0,-2,3,0,0],   t:'こもりを少し下げて、3kHz付近を上げると、歌詞が聞き取りやすくなります。' },
-    { name:'低音をすっきりさせる',   g:[-6,-2,0,0,0],  t:'低い帯域を下げると、ボワついた声がすっきりします。' },
-    { name:'刺さりをやわらげる',     g:[0,0,0,-5,0],   t:'6kHz付近を下げると、サ行のキツさがやわらぎます。' }
+    { name:'こもりを取る',           g:[0,-4,0,0,0,0],   t:'300Hz付近を下げると、こもった声が抜けやすくなります。' },
+    { name:'言葉をはっきりさせる',   g:[0,-2,0,3,0,0],   t:'こもりを少し下げて、3kHz付近を上げると、歌詞が聞き取りやすくなります。' },
+    { name:'低音をすっきりさせる',   g:[-6,-2,0,0,0,0],  t:'低い帯域を下げると、ボワついた声がすっきりします。' },
+    { name:'刺さりをやわらげる',     g:[0,0,0,0,-5,0],   t:'6kHz付近を下げると、サ行のキツさがやわらぎます。' }
   ]},
   { label:'雰囲気を変える', items:[
-    { name:'キラッと明るく',         g:[0,0,1,0,4],    t:'高い帯域(空気感)を上げると、明るくきらびやかな印象になります。' },
-    { name:'やさしくまろやかに',     g:[0,0,-2,-3,-2], t:'3kHz〜10kHzを少し下げると、やわらかく落ち着いた声になります。' },
-    { name:'太くあたたかく',         g:[5,0,-1,0,0],   t:'低音を足すと、ふくらみのある、あたたかい声になります。' }
+    { name:'キラッと明るく',         g:[0,0,0,1,0,4],    t:'高い帯域(空気感)を上げると、明るくきらびやかな印象になります。' },
+    { name:'やさしくまろやかに',     g:[0,0,0,-2,-3,-2], t:'3kHz〜10kHzを少し下げると、やわらかく落ち着いた声になります。' },
+    { name:'太くあたたかく',         g:[5,0,0,-1,0,0],   t:'低音を足すと、ふくらみのある、あたたかい声になります。' }
   ]},
   { label:'ラジオ・電話風', items:[
-    { name:'ラジオDJ風(太くて聞き取りやすい)', g:[4,-2,3,0,1],     t:'低音を足して太くし、3kHz付近で聞き取りやすく。近くで話しかけてくるラジオDJのような声に近づきます。' },
-    { name:'AMラジオ風(細くて昔っぽい)',       g:[-12,3,6,-5,-12], t:'低音と高音を大きく削って、中域を強調。昔のAMラジオのような、細くて少し遠い音に近づきます。' },
-    { name:'電話っぽい音',                     g:[-12,4,8,-8,-12], t:'低音と高音をほぼ削って、中域だけを強調。電話越しのような音に近づきます。' }
+    { name:'ラジオDJ風(太くて聞き取りやすい)', g:[4,-2,0,3,0,1],     t:'低音を足して太くし、3kHz付近で聞き取りやすく。近くで話しかけてくるラジオDJのような声に近づきます。' },
+    { name:'AMラジオ風(細くて昔っぽい)',       g:[-12,3,0,6,-5,-12], t:'低音と高音を大きく削って、中域を強調。昔のAMラジオのような、細くて少し遠い音に近づきます。' },
+    { name:'電話っぽい音',                     g:[-12,4,0,8,-8,-12], t:'低音と高音をほぼ削って、中域だけを強調。電話越しのような音に近づきます。' }
   ]}
 ];
 
